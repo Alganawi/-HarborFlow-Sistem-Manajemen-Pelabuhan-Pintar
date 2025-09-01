@@ -29,7 +29,7 @@ Traffic Management, Financial Managemen Modulet, Operational Dashboard, Document
 - Kongsberg Digital (Vessel Insight & Kognifai)
 - Danelec Marine (DanelecConnect)
 
-## 🛠 Teknologi yang Digunakan
+##  Teknologi yang Digunakan
 - **Frontend:** C# WPF/WinForms
 - **Backend:** .NET Core
 - **Database:** PostgreSQL
