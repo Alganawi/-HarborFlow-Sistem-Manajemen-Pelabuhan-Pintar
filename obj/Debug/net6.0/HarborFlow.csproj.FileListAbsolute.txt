@@ -1,0 +1,17 @@
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.csproj.AssemblyReference.cache
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.GeneratedMSBuildEditorConfig.editorconfig
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.AssemblyInfoInputs.cache
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.AssemblyInfo.cs
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.csproj.CoreCompileInputs.cache
+/Users/marseillosatrian/HarborFlow_test/bin/Debug/net6.0/HarborFlow
+/Users/marseillosatrian/HarborFlow_test/bin/Debug/net6.0/HarborFlow.deps.json
+/Users/marseillosatrian/HarborFlow_test/bin/Debug/net6.0/HarborFlow.runtimeconfig.json
+/Users/marseillosatrian/HarborFlow_test/bin/Debug/net6.0/HarborFlow.dll
+/Users/marseillosatrian/HarborFlow_test/bin/Debug/net6.0/HarborFlow.pdb
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.dll
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/refint/HarborFlow.dll
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.pdb
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.genruntimeconfig.cache
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/ref/HarborFlow.dll
+/Users/marseillosatrian/HarborFlow_test/bin/Debug/net6.0/Spectre.Console.dll
+/Users/marseillosatrian/HarborFlow_test/obj/Debug/net6.0/HarborFlow.csproj.CopyComplete

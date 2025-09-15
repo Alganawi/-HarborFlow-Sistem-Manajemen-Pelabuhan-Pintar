@@ -3,41 +3,41 @@ using System.Collections.Generic;
 
 namespace HarborFlow
 {
-    // ============ BASE USER CLASS ============
+    // ============ BASE USER CLASS ============ 
     public abstract class User
     {
         public int UserID { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public UserRole Role { get; set; }
-        
+
         public virtual void Login()
         {
             Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] User {Username} logged in");
         }
-        
+
         public virtual void Logout()
         {
             Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] User {Username} logged out");
         }
-        
+
         public virtual void UpdateProfile()
         {
             Console.WriteLine($"Profile updated for user: {Username}");
         }
     }
 
-    // ============ USER SUBCLASSES ============
+    // ============ USER SUBCLASSES ============ 
     public class ShippingAgent : User
     {
         private List<ServiceRequest> myRequests;
-        
+
         public ShippingAgent()
         {
             myRequests = new List<ServiceRequest>();
             Role = UserRole.ShippingAgent;
         }
-        
+
         public ServiceRequest CreateServiceRequest(Vessel vessel, string serviceType)
         {
             var request = new ServiceRequest
@@ -50,12 +50,11 @@ namespace HarborFlow
                 Vessel = vessel,
                 CreatedBy = this
             };
-            
             myRequests.Add(request);
             Console.WriteLine($"Service request #{request.RequestID} created for vessel {vessel.VesselName}");
             return request;
         }
-        
+
         public void UploadDocument(ServiceRequest request, string documentName)
         {
             var doc = new Document
@@ -66,7 +65,6 @@ namespace HarborFlow
                 IsVerified = false,
                 ServiceRequest = request
             };
-            
             request.AddDocument(doc);
             Console.WriteLine($"Document '{documentName}' uploaded for request #{request.RequestID}");
         }
@@ -75,13 +73,13 @@ namespace HarborFlow
     public class PortManager : User
     {
         private Dashboard dashboard;
-        
+
         public PortManager()
         {
             Role = UserRole.PortManager;
             dashboard = new Dashboard();
         }
-        
+
         public void ViewDashboard()
         {
             Console.WriteLine("\n=== OPERATIONAL DASHBOARD ===");
@@ -90,10 +88,10 @@ namespace HarborFlow
             Console.WriteLine("Recent Activities:");
             foreach (var activity in dashboard.RecentActivities)
             {
-                Console.WriteLine($"  • {activity}");
+                Console.WriteLine($" • {activity}");
             }
         }
-        
+
         public Report GenerateReport(string reportType)
         {
             var report = new Report
@@ -103,12 +101,10 @@ namespace HarborFlow
                 GeneratedDate = DateTime.Now,
                 Data = new Dictionary<string, object>()
             };
-            
             // Simulasi data report
             report.Data.Add("total_vessels", 25);
             report.Data.Add("total_revenue", 1500000);
             report.Data.Add("avg_turnaround", 48);
-            
             Console.WriteLine($"Report generated: {reportType} (ID: {report.ReportID})");
             return report;
         }
@@ -120,11 +116,10 @@ namespace HarborFlow
         {
             Role = UserRole.PortStaff;
         }
-        
+
         public void VerifyRequest(ServiceRequest request)
         {
             Console.WriteLine($"Verifying request #{request.RequestID}...");
-            
             // Simulasi verifikasi
             bool allDocumentsVerified = true;
             foreach (var doc in request.Documents)
@@ -135,7 +130,7 @@ namespace HarborFlow
                     allDocumentsVerified = false;
                 }
             }
-            
+
             if (allDocumentsVerified)
             {
                 request.UpdateStatus(RequestStatus.Approved);
@@ -147,7 +142,7 @@ namespace HarborFlow
                 Console.WriteLine($"Request #{request.RequestID} rejected - documents incomplete");
             }
         }
-        
+
         public Schedule ScheduleVessel(ServiceRequest request, int berthNumber)
         {
             var schedule = new Schedule
@@ -158,7 +153,6 @@ namespace HarborFlow
                 ActualDeparture = request.EstimatedArrival.AddDays(2),
                 ServiceRequest = request
             };
-            
             request.Schedule = schedule;
             Console.WriteLine($"Vessel {request.Vessel.VesselName} scheduled at berth {berthNumber}");
             return schedule;
@@ -171,7 +165,7 @@ namespace HarborFlow
         {
             Role = UserRole.FinanceAdmin;
         }
-        
+
         public Invoice CreateInvoice(ServiceRequest request, double amount)
         {
             var invoice = new Invoice
@@ -183,12 +177,11 @@ namespace HarborFlow
                 Status = InvoiceStatus.Draft,
                 ServiceRequest = request
             };
-            
             request.Invoice = invoice;
             Console.WriteLine($"Invoice {invoice.InvoiceNumber} created for ${amount:N2}");
             return invoice;
         }
-        
+
         public void ProcessPayment(Invoice invoice, string paymentMethod)
         {
             var payment = new Payment
@@ -199,16 +192,14 @@ namespace HarborFlow
                 PaymentMethod = paymentMethod,
                 Invoice = invoice
             };
-            
             payment.ProcessPayment();
             invoice.Payment = payment;
             invoice.Status = InvoiceStatus.Paid;
-            
             Console.WriteLine($"Payment processed: ${payment.Amount:N2} via {paymentMethod}");
         }
     }
 
-    // ============ DOMAIN CLASSES ============
+    // ============ DOMAIN CLASSES ============ 
     public class ServiceRequest
     {
         public int RequestID { get; set; }
@@ -221,32 +212,32 @@ namespace HarborFlow
         public List<Document> Documents { get; set; }
         public Schedule Schedule { get; set; }
         public Invoice Invoice { get; set; }
-        
+
         public ServiceRequest()
         {
             Documents = new List<Document>();
         }
-        
+
         public void CreateRequest()
         {
             Status = RequestStatus.Pending;
             RequestDate = DateTime.Now;
             Console.WriteLine($"Request #{RequestID} created");
         }
-        
+
         public void CancelRequest()
         {
             Status = RequestStatus.Cancelled;
             Console.WriteLine($"Request #{RequestID} cancelled");
         }
-        
+
         public void UpdateStatus(RequestStatus newStatus)
         {
             var oldStatus = Status;
             Status = newStatus;
             Console.WriteLine($"Request #{RequestID} status changed: {oldStatus} → {newStatus}");
         }
-        
+
         public void AddDocument(Document document)
         {
             Documents.Add(document);
@@ -261,7 +252,7 @@ namespace HarborFlow
         public string IMONumber { get; set; }
         public string Type { get; set; }
         public double Capacity { get; set; }
-        
+
         public void GetDetails()
         {
             Console.WriteLine($"Vessel: {VesselName}");
@@ -269,13 +260,13 @@ namespace HarborFlow
             Console.WriteLine($"Type: {Type}");
             Console.WriteLine($"Capacity: {Capacity} TEU");
         }
-        
+
         public void UpdateDetails(string name, string type, double capacity)
         {
             VesselName = name;
             Type = type;
             Capacity = capacity;
-            Console.WriteLine($"Vessel details updated");
+            Console.WriteLine("Vessel details updated");
         }
     }
 
@@ -286,12 +277,12 @@ namespace HarborFlow
         public string FilePath { get; set; }
         public bool IsVerified { get; set; }
         public ServiceRequest ServiceRequest { get; set; }
-        
+
         public void Upload()
         {
             Console.WriteLine($"Document '{DocumentName}' uploaded to {FilePath}");
         }
-        
+
         public void Verify()
         {
             IsVerified = true;
@@ -306,13 +297,13 @@ namespace HarborFlow
         public DateTime ActualArrival { get; set; }
         public DateTime ActualDeparture { get; set; }
         public ServiceRequest ServiceRequest { get; set; }
-        
+
         public void AssignBerth(int berth)
         {
             BerthNumber = berth;
             Console.WriteLine($"Berth {berth} assigned");
         }
-        
+
         public void UpdateSchedule(DateTime arrival, DateTime departure)
         {
             ActualArrival = arrival;
@@ -330,13 +321,13 @@ namespace HarborFlow
         public InvoiceStatus Status { get; set; }
         public ServiceRequest ServiceRequest { get; set; }
         public Payment Payment { get; set; }
-        
+
         public void GenerateInvoice()
         {
             Status = InvoiceStatus.Draft;
             Console.WriteLine($"Invoice {InvoiceNumber} generated");
         }
-        
+
         public void SendInvoice()
         {
             Status = InvoiceStatus.Sent;
@@ -351,7 +342,7 @@ namespace HarborFlow
         public double Amount { get; set; }
         public string PaymentMethod { get; set; }
         public Invoice Invoice { get; set; }
-        
+
         public void ProcessPayment()
         {
             Console.WriteLine($"Processing payment of ${Amount:N2}...");
@@ -364,7 +355,7 @@ namespace HarborFlow
         public int VesselCount { get; set; }
         public float BerthOccupancy { get; set; }
         public List<string> RecentActivities { get; set; }
-        
+
         public Dashboard()
         {
             // Data simulasi
@@ -379,7 +370,7 @@ namespace HarborFlow
                 "Berth 5 maintenance completed"
             };
         }
-        
+
         public void GetDashboardData()
         {
             Console.WriteLine("Fetching dashboard data...");
@@ -392,12 +383,12 @@ namespace HarborFlow
         public string ReportType { get; set; }
         public DateTime GeneratedDate { get; set; }
         public Dictionary<string, object> Data { get; set; }
-        
+
         public Report()
         {
             Data = new Dictionary<string, object>();
         }
-        
+
         public void GenerateReport()
         {
             Console.WriteLine($"Generating {ReportType} report...");
@@ -405,4 +396,9 @@ namespace HarborFlow
             Console.WriteLine($"Generated: {GeneratedDate:dd/MM/yyyy HH:mm}");
         }
     }
+    
+    // ============ ENUMS ============ 
+    public enum UserRole { ShippingAgent, PortManager, PortStaff, FinanceAdmin } 
+    public enum RequestStatus { Pending, Approved, Rejected, Cancelled, Completed } 
+    public enum InvoiceStatus { Draft, Sent, Paid, Overdue } 
 }

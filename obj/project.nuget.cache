@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "x06kcJ1MEfD1UkreMyOicMEkzbfgUbi4ijK7Qoevf8eMReePbxNQGZn5JT4KuBYcMNL+9Gii1/tRhJDo9+87+A==",
+  "success": true,
+  "projectFilePath": "/Users/marseillosatrian/HarborFlow_test/HarborFlow.csproj",
+  "expectedPackageFiles": [
+    "/Users/marseillosatrian/.nuget/packages/spectre.console/0.44.0/spectre.console.0.44.0.nupkg.sha512",
+    "/Users/marseillosatrian/.nuget/packages/microsoft.netcore.app.ref/6.0.31/microsoft.netcore.app.ref.6.0.31.nupkg.sha512",
+    "/Users/marseillosatrian/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.31/microsoft.aspnetcore.app.ref.6.0.31.nupkg.sha512",
+    "/Users/marseillosatrian/.nuget/packages/microsoft.netcore.app.host.osx-arm64/6.0.31/microsoft.netcore.app.host.osx-arm64.6.0.31.nupkg.sha512"
+  ],
+  "logs": []
+}
