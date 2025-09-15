@@ -3,6 +3,10 @@
 ![HarborFlow Screenshot](https://i.imgur.com/rGk5y6X.png)
 *(Contoh screenshot aplikasi sedang berjalan)*
 
+### Catatan
+
+File HarborFlowModels.cs adalah file standalone yang tidak termasuk dalam proyek, tetapi digunakan khusus untuk pengerjaan Modul 3.
+
 ## 1. Ringkasan Proyek
 
 HarborFlow adalah prototipe sistem manajemen pelabuhan berbasis konsol. Aplikasi ini dirancang sebagai *Command Center* mini untuk memonitor aktivitas maritim secara real-time, mengintegrasikan data cuaca dari API publik, dan mensimulasikan pergerakan kapal di sekitar area pelabuhan. Proyek ini dibangun menggunakan C# dan .NET 6 dengan antarmuka yang modern dan informatif berkat library Spectre.Console.
