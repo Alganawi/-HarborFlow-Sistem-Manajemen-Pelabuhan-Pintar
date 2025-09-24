@@ -7,11 +7,12 @@
 
 HarborFlow adalah prototipe sistem manajemen pelabuhan berbasis konsol yang dibangun dengan .NET 9 dan PostgreSQL. Aplikasi ini berfungsi sebagai platform terpusat untuk mengelola alur kerja operasional pelabuhan, mulai dari permintaan layanan kapal hingga penjadwalan sandar, dengan sistem otentikasi berbasis peran untuk memastikan keamanan dan alur kerja yang terdefinisi dengan baik.
 
-## 2. Tim Pengembang
+## 2. Tim Pengembang (Kelompok 4)
 
 | Nama | Role | Tanggung Jawab Utama |
-| :--- | :--- | :--- |
-| Gemini | Lead Developer | Merancang arsitektur, mengimplementasikan logika backend & frontend, dan manajemen database. |
+| --- | --- | --- |
+| Mirsad Alganawi Azma | Lead Developer & Software Architect | Merancang arsitektur sistem, desain data, dan memimpin pengembangan teknis. |
+| Marseillo R. B. Satrian | Full-Stack Developer | Mengimplementasikan logika backend, manajemen data, dan membangun antarmuka pengguna. |
 
 ---
 
