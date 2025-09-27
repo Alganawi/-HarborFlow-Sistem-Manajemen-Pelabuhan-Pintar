@@ -1,18 +1,18 @@
 # HarborFlow - Sistem Manajemen Pelabuhan
 
-![HarborFlow Screenshot](https://via.placeholder.com/800x400.png?text=HarborFlow+Console+UI)
-*(Contoh placeholder untuk screenshot aplikasi sedang berjalan)*
+![HarborFlow Screenshot](https://via.placeholder.com/800x400.png?text=HarborFlow+Web+UI)
+*(Contoh placeholder untuk screenshot aplikasi web yang sedang berjalan)*
 
 ## 1. Ringkasan Proyek
 
-HarborFlow adalah prototipe sistem manajemen pelabuhan berbasis konsol yang dibangun dengan .NET 9 dan PostgreSQL. Aplikasi ini berfungsi sebagai platform terpusat untuk mengelola alur kerja operasional pelabuhan, mulai dari permintaan layanan kapal hingga penjadwalan sandar, dengan sistem otentikasi berbasis peran untuk memastikan keamanan dan alur kerja yang terdefinisi dengan baik.
+HarborFlow adalah sistem manajemen pelabuhan full-stack yang dibangun dengan .NET 9 (ASP.NET Core) untuk backend API dan React untuk frontend. Aplikasi ini menyediakan platform terpusat untuk mengelola alur kerja operasional pelabuhan, mulai dari permintaan layanan kapal hingga pembuatan faktur, dengan otentikasi berbasis peran untuk memastikan alur kerja yang aman dan efisien.
 
 ## 2. Tim Pengembang (Kelompok 4)
 
-| Nama | Role | Tanggung Jawab Utama |
-| --- | --- | --- |
-| Mirsad Alganawi Azma | Lead Developer & Software Architect | Merancang arsitektur sistem, desain data, dan memimpin pengembangan teknis. |
-| Marseillo R. B. Satrian | Full-Stack Developer | Mengimplementasikan logika backend, manajemen data, dan membangun antarmuka pengguna. |
+| Nama                   | Role                        | Tanggung Jawab Utama                                                         |
+| ---------------------- | --------------------------- | ---------------------------------------------------------------------------- |
+| Mirsad Alganawi Azma   | Lead Developer & Software Architect | Merancang arsitektur sistem, desain data, dan memimpin pengembangan teknis. |
+| Marseillo R. B. Satrian| Full-Stack Developer        | Mengimplementasikan logika backend, manajemen data, dan membangun antarmuka pengguna. |
 
 ---
 
@@ -24,76 +24,103 @@ Operasional pelabuhan melibatkan banyak pihak dengan tanggung jawab berbeda, sep
 -   **Kurangnya Visibilitas:** Sulit bagi agen untuk melacak status permintaan mereka, dan bagi manajer untuk melihat semua permintaan yang perlu ditinjau dalam satu tempat.
 -   **Alur Persetujuan yang Tidak Jelas:** Proses verifikasi dokumen dan persetujuan jadwal tidak terstruktur, memperlambat proses sandar kapal.
 
-HarborFlow mengatasi masalah ini dengan menyediakan alur kerja digital yang jelas dan terpusat.
+HarborFlow mengatasi masalah ini dengan menyediakan alur kerja digital yang jelas dan terpusat melalui antarmuka web modern.
 
 ## 4. Solusi & Fitur Utama
 
-HarborFlow menyediakan platform berbasis peran di mana setiap pengguna memiliki akses ke fitur yang relevan dengan tanggung jawab mereka:
+HarborFlow menyediakan platform berbasis peran di mana setiap pengguna memiliki akses ke fitur yang relevan dengan tanggung jawab mereka melalui antarmuka web yang responsif:
 
--   **Otentikasi & Peran Pengguna:** Sistem login yang aman membedakan akses antara `PortManager` dan `ShippingAgent`.
+-   **Otentikasi & Otorisasi Aman:** Sistem login menggunakan JSON Web Tokens (JWT) untuk mengamankan endpoint API. Akses ke fitur-fitur spesifik dibatasi berdasarkan peran pengguna (`PortManager`, `ShippingAgent`, `FinanceAdmin`).
+-   **Dasbor Interaktif:** Setelah login, pengguna disajikan dengan dasbor yang menampilkan daftar permintaan layanan dan daftar kapal.
 -   **Manajemen Alur Kerja Lengkap:**
-    -   **Agen:** Dapat membuat permintaan layanan, melampirkan dokumen, dan menambahkan detail kargo.
-    -   **Manajer:** Dapat meninjau permintaan, memverifikasi dokumen, dan menyetujui jadwal sandar kapal.
--   **Manajemen Data Terpusat:** Semua data (kapal, permintaan, dokumen, kargo, jadwal) disimpan dalam database PostgreSQL, menyediakan satu sumber kebenaran.
--   **Logika Bisnis Cerdas:** Sistem secara otomatis memberlakukan aturan, seperti hanya mengizinkan penjadwalan untuk permintaan yang dokumennya telah diverifikasi sepenuhnya.
--   **Antarmuka Konsol Modern:** Dibangun menggunakan `Spectre.Console` untuk pengalaman pengguna yang bersih dan interaktif.
+    -   **Agen:** Dapat membuat permintaan layanan baru dan menambahkan dokumen langsung dari halaman detail permintaan.
+    -   **Manajer:** Dapat meninjau permintaan dan memverifikasi dokumen (fungsionalitas UI akan datang).
+-   **Manajemen Keuangan:** Pengguna dengan peran `Finance` dapat membuat invoice dan mencatat pembayaran (fungsionalitas UI akan datang).
+-   **Backend API yang Kuat:** Dibangun dengan ASP.NET Core, menyediakan endpoint yang aman dan efisien untuk semua operasi, dengan validasi input untuk memastikan integritas data.
+-   **Frontend React Modern:** Antarmuka pengguna yang interaktif dan mudah digunakan dibangun dengan React, dengan manajemen sesi pengguna yang persisten.
 
 ## 5. Tampilan Aplikasi
 
-Berikut adalah representasi dari beberapa tampilan utama di konsol:
+Aplikasi ini terdiri dari backend API dan frontend React yang berjalan secara terpisah namun terintegrasi.
 
-**Layar Login:**
-```
-Welcome to HarborFlow. Please log in.
-Username: manager
-Password: ****
-```
+**Backend API:**
+Menyediakan endpoint RESTful untuk mengelola semua data dan logika bisnis, diamankan dengan otentikasi JWT.
 
-**Menu Port Manager:**
-```
-HarborFlow Menu (Logged in as manager)
->   Show All Vessels
-    View All Schedules
-    Add New Vessel
-    Create Schedule
-    Verify Document
-    Exit
-```
-
-**Menu Shipping Agent:**
-```
-HarborFlow Menu (Logged in as agent)
->   Show All Vessels
-    View All Schedules
-    Create Service Request
-    Add Document to Request
-    Manage Cargo
-    Exit
-```
+**Frontend Web (React):**
+Memberikan pengalaman pengguna yang modern untuk berinteraksi dengan sistem, termasuk halaman login, dasbor utama, formulir pembuatan data, dan halaman detail.
 
 ## 6. Arsitektur & Teknologi
 
--   **Bahasa Pemrograman:** C# & .NET 9
--   **Database:** PostgreSQL
--   **ORM:** Entity Framework Core
--   **Library UI:** `Spectre.Console`
--   **Pola Desain:** Arsitektur N-Tier sederhana dengan pemisahan antara UI (di `Program.cs`), Layanan Bisnis (`HarborService.cs`), dan Model Data (`HarborFlowModels.cs`).
+-   **Backend:**
+    -   **Bahasa & Framework:** C# & ASP.NET Core (.NET 9)
+    -   **Database:** PostgreSQL
+    -   **ORM:** Entity Framework Core
+    -   **Keamanan:** Otentikasi JWT (JSON Web Token)
+-   **Frontend:**
+    -   **Library:** React
+    -   **HTTP Client:** Axios
+-   **Struktur Proyek:**
+    -   `HarborFlow.WebAPI`: Proyek ASP.NET Core yang menjadi backend.
+    -   `HarborFlow.Core`: Class library yang berisi model data dan logika bisnis.
+    -   `client-app`: Proyek React yang menjadi frontend.
+    -   `HarborFlow.Tests`: Proyek xUnit untuk pengujian.
 
-## 7. Rencana Pengembangan (Roadmap)
+## 7. Aplikasi Sejenis (Competitor Landscape)
+
+HarborFlow adalah prototipe sederhana yang terinspirasi dari *Vessel Traffic Management Systems (VTMS)* komersial. Beberapa pemain utama di industri ini meliputi:
+
+-   **Wärtsilä Navi-Harbour & MarineTraffic:** Platform canggih yang menawarkan pemantauan lalu lintas global, analisis prediktif, dan integrasi mendalam dengan sistem pelabuhan.
+-   **Kongsberg Gruppen & Indra:** Menyediakan solusi VTMS terintegrasi yang digunakan oleh pelabuhan besar di seluruh dunia untuk keamanan dan efisiensi navigasi.
+-   **VesselFinder & FleetMon:** Layanan yang lebih fokus pada pelacakan kapal berbasis AIS (Automatic Identification System) untuk publik dan komersial.
+
+HarborFlow mengambil konsep dasar dari sistem-sistem ini dan menyajikannya dalam skala yang lebih kecil dan dapat diakses.
+
+## 8. Rencana Pengembangan (Roadmap)
 
 -   **[✔] Fase 1 (Selesai):** Fondasi aplikasi dengan CRUD, sistem login, alur kerja dokumen, dan manajemen kargo.
--   **[ ] Fase 2: Modul Keuangan:** Mengimplementasikan pembuatan `Invoice` dari `ServiceRequest` dan pencatatan `Payment`.
--   **[ ] Fase 3: Notifikasi:** Menambahkan sistem notifikasi sederhana (misalnya, agen mendapat notifikasi jika permintaan disetujui).
--   **[ ] Fase 4: Pengujian & Validasi:** Membangun proyek unit test untuk memvalidasi logika di `HarborService`.
--   **[ ] Fase 5: Antarmuka Web/Desktop:** Migrasi dari aplikasi konsol ke antarmuka grafis (GUI) untuk visualisasi yang lebih baik.
+-   **[✔] Fase 2 (Selesai):** Modul Keuangan untuk membuat invoice dan mencatat pembayaran.
+-   **[✔] Fase 3 (Selesai):** Backend API dan Frontend Web dasar dengan otentikasi JWT.
+-   **[✔] Fase 4 (Selesai):** Peningkatan Kualitas Kode Backend (mengatasi peringatan nullable dan menambah validasi input).
+-   **[✔] Fase 5 (Sebagian Selesai):** Penulisan Unit Test untuk `HarborService` (mencakup service request, dokumen, kargo, dan invoice).
+-   **[✔] Fase 6 (Sebagian Selesai):** Pengembangan UI Lanjutan (detail permintaan layanan dan tambah dokumen).
+-   **[ ] Fase 7: Notifikasi:** Menambahkan sistem notifikasi real-time.
+-   **[ ] Fase 8: Pengujian End-to-End:** Membangun pengujian untuk memvalidasi alur kerja dari UI hingga database.
 
-## 8. Cara Menjalankan Aplikasi
+## 9. Cara Menjalankan Aplikasi
 
-1.  Pastikan Anda memiliki **.NET 9 SDK** dan **PostgreSQL** terinstal.
-2.  Buat database baru di PostgreSQL (misal: `HarborFlowDb`).
-3.  Buka file `appsettings.json` dan perbarui `Password` di dalam `DefaultConnection` agar sesuai dengan konfigurasi PostgreSQL Anda.
-4.  Buka terminal di direktori proyek dan jalankan `dotnet run`.
-5.  Login menggunakan salah satu akun demo di bawah.
+### Prasyarat
+-   **.NET 9 SDK**
+-   **Node.js** (versi 14 atau lebih baru)
+-   **PostgreSQL**
+
+### Backend (ASP.NET Core API)
+1.  Buat database baru di PostgreSQL (misal: `HarborFlowDb`).
+2.  Buka file `HarborFlow.WebAPI/appsettings.json` dan perbarui `Password` di dalam `DefaultConnection` agar sesuai dengan konfigurasi PostgreSQL Anda.
+3.  Buka terminal di direktori `HarborFlow.WebAPI` dan jalankan perintah:
+    ```sh
+    dotnet run
+    ```
+    API akan berjalan di `https://localhost:7246` (atau port lain yang dikonfigurasi).
+
+### Frontend (React App)
+1.  Buka terminal baru di direktori `client-app`.
+2.  Install dependensi dengan menjalankan:
+    ```sh
+    npm install
+    ```
+3.  Mulai aplikasi React:
+    ```sh
+    npm start
+    ```
+    Aplikasi akan terbuka di browser pada alamat `http://localhost:3000`.
+
+### Pengujian (Testing)
+
+Proyek ini dilengkapi dengan unit test untuk memastikan kualitas dan stabilitas logika bisnis di `HarborService`. Tes ini mencakup pembuatan kapal, permintaan layanan, dokumen, kargo, dan invoice. Untuk menjalankan semua tes, gunakan perintah berikut dari direktori utama:
+
+```sh
+dotnet test
+```
 
 ### Pengguna Demo
 
@@ -102,4 +129,7 @@ HarborFlow Menu (Logged in as agent)
     -   **Password:** `pass`
 -   **Shipping Agent**
     -   **Username:** `agent`
+    -   **Password:** `pass`
+-   **Finance Admin**
+    -   **Username:** `finance`
     -   **Password:** `pass`
