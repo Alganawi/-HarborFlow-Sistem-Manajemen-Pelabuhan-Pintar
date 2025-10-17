@@ -1,4 +1,4 @@
-### Penjelasan Proyek
+### Penjelasan Proyek Junior
 
 Pada pertemuan ini, Praktikan diminta untuk mengusulkan ide mengenai sebuah perangkat lunak sederhana. Perangkat lunak yang diusulkan harus dapat melakukan fungsi-fungsi dibawah ini:
 
