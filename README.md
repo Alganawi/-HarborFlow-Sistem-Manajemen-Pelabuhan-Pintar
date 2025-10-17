@@ -1,56 +1,69 @@
-# HarborFlow - Sistem Manajemen Pelabuhan Pintar
+# HarborFlow - Sistem Manajemen Pelabuhan
 
-![HarborFlow Screenshot](https://i.imgur.com/rGk5y6X.png)
-*(Contoh screenshot aplikasi sedang berjalan)*
+![HarborFlow Screenshot](https://via.placeholder.com/800x400.png?text=HarborFlow+Web+UI)
+*(Contoh placeholder untuk screenshot aplikasi web yang sedang berjalan)*
 
 ## 1. Ringkasan Proyek
 
-HarborFlow adalah prototipe sistem manajemen pelabuhan berbasis konsol. Aplikasi ini dirancang sebagai *Command Center* mini untuk memonitor aktivitas maritim secara real-time, mengintegrasikan data cuaca dari API publik, dan mensimulasikan pergerakan kapal di sekitar area pelabuhan. Proyek ini dibangun menggunakan C# dan .NET 6 dengan antarmuka yang modern dan informatif berkat library Spectre.Console.
+HarborFlow adalah sistem manajemen pelabuhan full-stack yang dibangun dengan .NET 9 (ASP.NET Core) untuk backend API dan React untuk frontend. Aplikasi ini menyediakan platform terpusat untuk mengelola alur kerja operasional pelabuhan, mulai dari permintaan layanan kapal hingga pembuatan faktur, dengan otentikasi berbasis peran untuk memastikan alur kerja yang aman dan efisien.
 
 ## 2. Tim Pengembang (Kelompok 4)
 
-| Nama | Role | Tanggung Jawab Utama |
-| --- | --- | --- |
-| Mirsad Alganawi Azma | Lead Developer & Software Architect | Merancang arsitektur sistem, desain data, dan memimpin pengembangan teknis. |
-| Marseillo R. B. Satrian | Full-Stack Developer | Mengimplementasikan logika backend, manajemen data, dan membangun antarmuka pengguna. |
+| Nama                   | Role                        | Tanggung Jawab Utama                                                         |
+| ---------------------- | --------------------------- | ---------------------------------------------------------------------------- |
+| Mirsad Alganawi Azma   | Lead Developer & Software Architect | Merancang arsitektur sistem, desain data, dan memimpin pengembangan teknis. |
+| Marseillo R. B. Satrian| Full-Stack Developer        | Mengimplementasikan logika backend, manajemen data, dan membangun antarmuka pengguna. |
 
 ---
 
 ## 3. Permasalahan yang Dipecahkan
 
-Manajemen pelabuhan modern menghadapi tantangan dalam memonitor lalu lintas kapal dan kondisi lingkungan secara efisien. Tanpa sistem terpusat, operator pelabuhan seringkali kesulitan untuk:
+Operasional pelabuhan melibatkan banyak pihak dengan tanggung jawab berbeda, seperti agen pengiriman dan manajer pelabuhan. Tanpa sistem yang terintegrasi, proses-proses berikut menjadi tidak efisien:
 
--   **Mendapatkan Gambaran Real-Time:** Kurangnya visibilitas terpadu terhadap kapal-kapal yang mendekat, status mereka, dan perkiraan waktu tiba (ETA).
--   **Mengantisipasi Kondisi Cuaca:** Keterlambatan dalam merespons perubahan cuaca buruk dapat membahayakan navigasi dan operasional bongkar muat.
--   **Koordinasi Operasional:** Proses pemantauan yang manual dan terfragmentasi mengurangi efisiensi dan meningkatkan risiko kesalahan operasional.
+-   **Koordinasi Manual:** Permintaan layanan, pengiriman dokumen, dan penjadwalan seringkali dilakukan secara manual (email, telepon), yang rentan terhadap kesalahan dan keterlambatan.
+-   **Kurangnya Visibilitas:** Sulit bagi agen untuk melacak status permintaan mereka, dan bagi manajer untuk melihat semua permintaan yang perlu ditinjau dalam satu tempat.
+-   **Alur Persetujuan yang Tidak Jelas:** Proses verifikasi dokumen dan persetujuan jadwal tidak terstruktur, memperlambat proses sandar kapal.
 
-HarborFlow dirancang untuk mengatasi masalah ini dengan menyediakan dashboard terpusat yang menyajikan informasi kunci secara *real-time*.
+HarborFlow mengatasi masalah ini dengan menyediakan alur kerja digital yang jelas dan terpusat melalui antarmuka web modern.
 
 ## 4. Solusi & Fitur Utama
 
-Sebagai solusi, HarborFlow bertindak sebagai *single source of truth* bagi operator pelabuhan melalui fitur-fitur berikut:
+HarborFlow menyediakan platform berbasis peran di mana setiap pengguna memiliki akses ke fitur yang relevan dengan tanggung jawab mereka melalui antarmuka web yang responsif:
 
--   **Dashboard Live:** Tampilan utama yang diperbarui secara otomatis menyajikan data cuaca, status pelabuhan, dan lalu lintas kapal dalam satu layar.
--   **Integrasi Data Cuaca:** Mengambil data cuaca (suhu dan kecepatan angin) dari Open-Meteo API untuk memberikan peringatan dini terhadap kondisi buruk.
--   **Pelacakan Kapal (Simulasi):** Mensimulasikan pergerakan kapal yang mendekat, lengkap dengan status dinamis (`En Route`, `Approaching`, `Arrived`) berdasarkan jarak ke pelabuhan.
--   **Sistem Peringatan Cerdas:** Memberikan notifikasi visual untuk kejadian penting, seperti cuaca buruk atau saat kapal memasuki zona krusial pelabuhan.
--   **Estimasi Waktu Tiba (ETA):** Menghitung perkiraan waktu tiba kapal secara dinamis berdasarkan kecepatan dan jarak, membantu perencanaan sandar.
--   **Pencatatan Kejadian (Logging):** Semua kejadian penting (peringatan, kedatangan kapal) dicatat ke dalam file log untuk audit dan analisis pasca-operasi.
+-   **Otentikasi & Otorisasi Aman:** Sistem login menggunakan JSON Web Tokens (JWT) untuk mengamankan endpoint API. Akses ke fitur-fitur spesifik dibatasi berdasarkan peran pengguna (`PortManager`, `ShippingAgent`, `FinanceAdmin`).
+-   **Dasbor Interaktif:** Setelah login, pengguna disajikan dengan dasbor yang menampilkan daftar permintaan layanan dan daftar kapal.
+-   **Manajemen Alur Kerja Lengkap:**
+    -   **Agen:** Dapat membuat permintaan layanan baru dan menambahkan dokumen langsung dari halaman detail permintaan.
+    -   **Manajer:** Dapat meninjau permintaan dan memverifikasi dokumen (fungsionalitas UI akan datang).
+-   **Manajemen Keuangan:** Pengguna dengan peran `Finance` dapat membuat invoice dan mencatat pembayaran (fungsionalitas UI akan datang).
+-   **Backend API yang Kuat:** Dibangun dengan ASP.NET Core, menyediakan endpoint yang aman dan efisien untuk semua operasi, dengan validasi input untuk memastikan integritas data.
+-   **Frontend React Modern:** Antarmuka pengguna yang interaktif dan mudah digunakan dibangun dengan React, dengan manajemen sesi pengguna yang persisten.
 
 ## 5. Tampilan Aplikasi
 
-Berikut adalah representasi data yang ditampilkan di dashboard:
+Aplikasi ini terdiri dari backend API dan frontend React yang berjalan secara terpisah namun terintegrasi.
 
-| Vessel Traffic | Port Status |
-| :--- | :--- |
-| **Tabel Kapal Masuk**<br><table><thead><tr><th>Status</th><th>Nama Kapal</th><th>ETA</th><th>Posisi</th><th>Kecepatan</th></tr></thead><tbody><tr><td>🟡 Approaching</td><td>MSC Isabella</td><td>01j 22m</td><td>-6.12, 106.90</td><td>12 kts</td></tr><tr><td>🔵 En Route</td><td>Ever Ace</td><td>03j 45m</td><td>-6.25, 107.10</td><td>15 kts</td></tr><tr><td>🟢 Arrived</td><td>HMM Algeciras</td><td>-</td><td>-6.10, 106.88</td><td>0 kts</td></tr><tr><td>🔵 En Route</td><td>OOCL Hong Kong</td><td>05j 10m</td><td>-6.40, 107.25</td><td>14 kts</td></tr></tbody></table> | **Status Pelabuhan**<br>Temp: **29°C**, Angin: **15 km/h**<br><hr><strong>Ringkasan Aktivitas</strong><br>Dilacak: **4** \| Tiba: **1** \| Peringatan: **0** |
+**Backend API:**
+Menyediakan endpoint RESTful untuk mengelola semua data dan logika bisnis, diamankan dengan otentikasi JWT.
+
+**Frontend Web (React):**
+Memberikan pengalaman pengguna yang modern untuk berinteraksi dengan sistem, termasuk halaman login, dasbor utama, formulir pembuatan data, dan halaman detail.
 
 ## 6. Arsitektur & Teknologi
 
--   **Bahasa Pemrograman:** C# & .NET 6
--   **Library Utama:** `Spectre.Console` untuk UI, `System.Net.Http` untuk API calls.
--   **API Eksternal:** Open-Meteo Weather API.
--   **Pola Desain:** Logika aplikasi dipisahkan ke dalam *Models*, *Services*, dan *UI (View)* untuk memastikan kode yang bersih dan mudah dikelola.
+-   **Backend:**
+    -   **Bahasa & Framework:** C# & ASP.NET Core (.NET 9)
+    -   **Database:** PostgreSQL
+    -   **ORM:** Entity Framework Core
+    -   **Keamanan:** Otentikasi JWT (JSON Web Token)
+-   **Frontend:**
+    -   **Library:** React
+    -   **HTTP Client:** Axios
+-   **Struktur Proyek:**
+    -   `HarborFlow.WebAPI`: Proyek ASP.NET Core yang menjadi backend.
+    -   `HarborFlow.Core`: Class library yang berisi model data dan logika bisnis.
+    -   `client-app`: Proyek React yang menjadi frontend.
+    -   `HarborFlow.Tests`: Proyek xUnit untuk pengujian.
 
 ## 7. Aplikasi Sejenis (Competitor Landscape)
 
@@ -64,17 +77,119 @@ HarborFlow mengambil konsep dasar dari sistem-sistem ini dan menyajikannya dalam
 
 ## 8. Rencana Pengembangan (Roadmap)
 
-Prototipe ini memiliki potensi besar untuk dikembangkan lebih lanjut. Berikut adalah beberapa fitur yang direncanakan untuk versi mendatang:
-
--   **[✔] Fase 1 (Current):** Dashboard konsol dengan data cuaca dan simulasi kapal.
--   **[ ] Fase 2: Integrasi Data AIS Real:** Mengganti data simulasi dengan data *real-time* dari sensor atau API AIS untuk pelacakan kapal yang akurat.
--   **[ ] Fase 3: Database & Analisis Historis:** Menyimpan data operasional ke dalam database untuk memungkinkan analisis tren, pelaporan, dan visualisasi data historis.
--   **[ ] Fase 4: Antarmuka Web/Desktop:** Mengembangkan antarmuka pengguna grafis (GUI) berbasis web atau desktop untuk visualisasi yang lebih kaya dan interaktif.
--   **[ ] Fase 5: Manajemen Bongkar Muat:** Menambahkan fitur untuk mengelola jadwal sandar kapal, alokasi dermaga, dan status bongkar muat.
+-   **[✔] Fase 1 (Selesai):** Fondasi aplikasi dengan CRUD, sistem login, alur kerja dokumen, dan manajemen kargo.
+-   **[✔] Fase 2 (Selesai):** Modul Keuangan untuk membuat invoice dan mencatat pembayaran.
+-   **[✔] Fase 3 (Selesai):** Backend API dan Frontend Web dasar dengan otentikasi JWT.
+-   **[✔] Fase 4 (Selesai):** Peningkatan Kualitas Kode Backend (mengatasi peringatan nullable dan menambah validasi input).
+-   **[✔] Fase 5 (Sebagian Selesai):** Penulisan Unit Test untuk `HarborService` (mencakup service request, dokumen, kargo, dan invoice).
+-   **[✔] Fase 6 (Sebagian Selesai):** Pengembangan UI Lanjutan (detail permintaan layanan dan tambah dokumen).
+-   **[ ] Fase 7: Notifikasi:** Menambahkan sistem notifikasi real-time.
+-   **[ ] Fase 8: Pengujian End-to-End:** Membangun pengujian untuk memvalidasi alur kerja dari UI hingga database.
 
 ## 9. Cara Menjalankan Aplikasi
 
-1.  Pastikan Anda memiliki **.NET 6 SDK** terinstal.
-2.  Buka terminal di direktori proyek.
-3.  Jalankan perintah `dotnet run`.
-4.  Dashboard akan muncul dan mulai memperbarui data secara otomatis. Tekan `Ctrl + C` untuk keluar.
+### Prasyarat
+-   **.NET 9 SDK**
+-   **Node.js** (versi 14 atau lebih baru)
+-   **PostgreSQL**
+
+### Backend (ASP.NET Core API)
+1.  Buat database baru di PostgreSQL (misal: `HarborFlowDb`).
+2.  Buka file `HarborFlow.WebAPI/appsettings.json` dan perbarui `Password` di dalam `DefaultConnection` agar sesuai dengan konfigurasi PostgreSQL Anda.
+3.  Buka terminal di direktori `HarborFlow.WebAPI` dan jalankan perintah:
+    ```sh
+    dotnet run
+    ```
+    API akan berjalan di `https://localhost:7246` (atau port lain yang dikonfigurasi).
+
+### Frontend (React App)
+1.  Buka terminal baru di direktori `client-app`.
+2.  Install dependensi dengan menjalankan:
+    ```sh
+    npm install
+    ```
+3.  Mulai aplikasi React:
+    ```sh
+    npm start
+    ```
+    Aplikasi akan terbuka di browser pada alamat `http://localhost:3000`.
+
+### Pengujian (Testing)
+
+Proyek ini dilengkapi dengan unit test untuk memastikan kualitas dan stabilitas logika bisnis di `HarborService`. Tes ini mencakup pembuatan kapal, permintaan layanan, dokumen, kargo, dan invoice. Untuk menjalankan semua tes, gunakan perintah berikut dari direktori utama:
+
+```sh
+dotnet test
+```
+
+### Pengguna Demo
+
+-   **Port Manager**
+    -   **Username:** `manager`
+    -   **Password:** `pass`
+-   **Shipping Agent**
+    -   **Username:** `agent`
+    -   **Password:** `pass`
+-   **Finance Admin**
+    -   **Username:** `finance`
+    -   **Password:** `pass`
+
+
+ 1. Buka Terminal Anda.
+
+   2. Gunakan perintah `psql` untuk terhubung ke database. Berdasarkan 
+      informasi dari proyek Anda, perintahnya adalah sebagai berikut:
+
+   1     psql -h localhost -U postgres -d db_project
+
+       * -h localhost: Menentukan localhost sebagai host database.
+       * -U postgres: Menggunakan postgres sebagai nama pengguna.
+       * -d db_project: Terhubung ke database bernama db_project.
+
+   3. Masukkan Kata Sandi. Setelah menjalankan perintah di atas, Anda akan 
+      diminta memasukkan kata sandi untuk pengguna postgres. Berdasarkan 
+      file konfigurasi Anda, kata sandinya adalah Bizero_11.
+
+   4. Tampilkan Tabel. Setelah berhasil terhubung, Anda akan masuk ke dalam
+       shell psql. Untuk melihat daftar semua tabel di database, gunakan 
+      perintah \dt:
+
+   1     \dt
+
+   5. Keluar dari `psql`. Jika sudah selesai, Anda bisa keluar dari shell 
+      psql dengan mengetik:
+
+   1     \q
+
+  Itu saja! Anda akan melihat daftar tabel yang sama dengan yang saya 
+  tunjukkan sebelumnya.
+
+                List of relations
+ Schema |      Name       | Type  |  Owner   
+--------+-----------------+-------+----------
+ public | Cargos          | table | postgres
+ public | Documents       | table | postgres
+ public | Invoices        | table | postgres
+ public | Payments        | table | postgres
+ public | Schedules       | table | postgres
+ public | ServiceRequests | table | postgres
+ public | Users           | table | postgres
+ public | Vessels         | table | postgres
+(8 rows)
+
+
+                                                    List of databases
+    Name    |     Owner      | Encoding | Locale Provider | Collate | Ctype | Locale | ICU Rules |   Access privileges   
+------------+----------------+----------+-----------------+---------+-------+--------+-----------+-----------------------
+ db_project | nama_user_baru | UTF8     | libc            | C       | C     |        |           | 
+ postgres   | postgres       | UTF8     | libc            | C       | C     |        |           | 
+ template0  | postgres       | UTF8     | libc            | C       | C     |        |           | =c/postgres          +
+            |                |          |                 |         |       |        |           | postgres=CTc/postgres
+ template1  | postgres       | UTF8     | libc            | C       | C     |        |           | =c/postgres          +
+            |                |          |                 |         |       |        |           | postgres=CTc/postgres
+(4 rows)
+
+~
+~
+~
+~
