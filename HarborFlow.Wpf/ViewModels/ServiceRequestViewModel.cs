@@ -21,7 +21,9 @@ namespace HarborFlow.Wpf.ViewModels
         private readonly INotificationService _notificationService;
         private readonly ILogger<ServiceRequestViewModel> _logger;
         private readonly SessionContext _sessionContext;
-        private readonly MainWindowViewModel _mainWindowViewModel;
+        
+        // Event to notify when loading state changes
+        public event Action<bool>? LoadingStateChanged;
 
         public ObservableCollection<ServiceRequest> ServiceRequests { get; } = new ObservableCollection<ServiceRequest>();
 
@@ -49,19 +51,36 @@ namespace HarborFlow.Wpf.ViewModels
         public ICommand RejectServiceRequestCommand { get; }
 
         public bool CanUserApproveOrReject => CanApproveOrReject(null);
-        public bool CanAddServiceRequest => _sessionContext.CurrentUser?.Role == UserRole.MaritimeAgent;
-        public bool CanEditServiceRequest => _sessionContext.CurrentUser?.Role == UserRole.MaritimeAgent && SelectedServiceRequest?.RequestedBy == _sessionContext.CurrentUser?.UserId;
-        public bool CanDeleteServiceRequest => _sessionContext.CurrentUser?.Role == UserRole.Administrator;
+        public bool CanAddServiceRequest => _sessionContext?.CurrentUser?.Role == UserRole.MaritimeAgent;
+        public bool CanEditServiceRequest => _sessionContext?.CurrentUser?.Role == UserRole.MaritimeAgent && SelectedServiceRequest?.RequestedBy == _sessionContext.CurrentUser?.UserId;
+        public bool CanDeleteServiceRequest => _sessionContext?.CurrentUser?.Role == UserRole.Administrator;
+
+        // Design-time constructor for XAML designer
+        public ServiceRequestViewModel()
+        {
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
+                RefreshServiceRequestsCommand = new RelayCommand(_ => { });
+                AddServiceRequestCommand = new RelayCommand(_ => { });
+                EditServiceRequestCommand = new RelayCommand(_ => { });
+                DeleteServiceRequestCommand = new RelayCommand(_ => { });
+                ApproveServiceRequestCommand = new RelayCommand(_ => { });
+                RejectServiceRequestCommand = new RelayCommand(_ => { });
+                return; // Exit early for design mode
+            }
+            
+            // This will not be reached in design mode, but needed to satisfy compiler
+            throw new InvalidOperationException("This constructor should only be used in design mode.");
+        }
 
 
-        public ServiceRequestViewModel(IPortServiceManager portServiceManager, IWindowManager windowManager, INotificationService notificationService, ILogger<ServiceRequestViewModel> logger, SessionContext sessionContext, MainWindowViewModel mainWindowViewModel)
+        public ServiceRequestViewModel(IPortServiceManager portServiceManager, IWindowManager windowManager, INotificationService notificationService, ILogger<ServiceRequestViewModel> logger, SessionContext sessionContext)
         {
             _portServiceManager = portServiceManager;
             _windowManager = windowManager;
             _notificationService = notificationService;
             _logger = logger;
             _sessionContext = sessionContext;
-            _mainWindowViewModel = mainWindowViewModel;
             RefreshServiceRequestsCommand = new AsyncRelayCommand(_ => LoadServiceRequestsAsync());
             AddServiceRequestCommand = new AsyncRelayCommand(_ => AddServiceRequest(), _ => CanAddServiceRequest);
             EditServiceRequestCommand = new AsyncRelayCommand(_ => EditServiceRequest(), _ => SelectedServiceRequest != null && CanEditServiceRequest);
@@ -82,7 +101,7 @@ namespace HarborFlow.Wpf.ViewModels
         {
             if (_sessionContext.CurrentUser == null) return;
 
-            _mainWindowViewModel.IsLoading = true;
+            LoadingStateChanged?.Invoke(true);
             try
             {
                 ServiceRequests.Clear();
@@ -98,7 +117,7 @@ namespace HarborFlow.Wpf.ViewModels
             }
             finally
             {
-                _mainWindowViewModel.IsLoading = false;
+                LoadingStateChanged?.Invoke(false);
             }
         }
 
@@ -109,7 +128,7 @@ namespace HarborFlow.Wpf.ViewModels
             var dialogResult = _windowManager.ShowServiceRequestEditorDialog(newRequest);
             if (dialogResult == true)
             {
-                _mainWindowViewModel.IsLoading = true;
+                LoadingStateChanged?.Invoke(true);
                 try
                 {
                     await _portServiceManager.SubmitServiceRequestAsync(newRequest);
@@ -121,7 +140,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    _mainWindowViewModel.IsLoading = false;
+                    LoadingStateChanged?.Invoke(false);
                 }
             }
         }
@@ -134,7 +153,7 @@ namespace HarborFlow.Wpf.ViewModels
             var dialogResult = _windowManager.ShowServiceRequestEditorDialog(requestCopy);
             if (dialogResult == true)
             {
-                _mainWindowViewModel.IsLoading = true;
+                LoadingStateChanged?.Invoke(true);
                 try
                 {
                     await _portServiceManager.UpdateServiceRequestAsync(requestCopy);
@@ -146,7 +165,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    _mainWindowViewModel.IsLoading = false;
+                    LoadingStateChanged?.Invoke(false);
                 }
             }
         }
@@ -157,7 +176,7 @@ namespace HarborFlow.Wpf.ViewModels
             {
                 if (_notificationService.ShowConfirmation("Delete Service Request", $"Are you sure you want to delete this service request?"))
                 {
-                    _mainWindowViewModel.IsLoading = true;
+                    LoadingStateChanged?.Invoke(true);
                     try
                     {
                         await _portServiceManager.DeleteServiceRequestAsync(SelectedServiceRequest.RequestId);
@@ -169,7 +188,7 @@ namespace HarborFlow.Wpf.ViewModels
                     }
                     finally
                     {
-                        _mainWindowViewModel.IsLoading = false;
+                        LoadingStateChanged?.Invoke(false);
                     }
                 }
             }
@@ -178,7 +197,7 @@ namespace HarborFlow.Wpf.ViewModels
         private async Task ApproveServiceRequest()
         {
             if (SelectedServiceRequest == null || _sessionContext.CurrentUser == null) return;
-            _mainWindowViewModel.IsLoading = true;
+            LoadingStateChanged?.Invoke(true);
             try
             {
                 await _portServiceManager.ApproveServiceRequestAsync(SelectedServiceRequest.RequestId, _sessionContext.CurrentUser.UserId);
@@ -190,7 +209,7 @@ namespace HarborFlow.Wpf.ViewModels
             }
             finally
             {
-                _mainWindowViewModel.IsLoading = false;
+                LoadingStateChanged?.Invoke(false);
             }
         }
 
@@ -201,7 +220,7 @@ namespace HarborFlow.Wpf.ViewModels
             var reason = _windowManager.ShowInputDialog("Reject Service Request", "Please provide a reason for rejection:");
             if (reason != null)
             {
-                _mainWindowViewModel.IsLoading = true;
+                LoadingStateChanged?.Invoke(true);
                 try
                 {
                     await _portServiceManager.RejectServiceRequestAsync(SelectedServiceRequest.RequestId, _sessionContext.CurrentUser.UserId, reason);
@@ -213,7 +232,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    _mainWindowViewModel.IsLoading = false;
+                    LoadingStateChanged?.Invoke(false);
                 }
             }
         }

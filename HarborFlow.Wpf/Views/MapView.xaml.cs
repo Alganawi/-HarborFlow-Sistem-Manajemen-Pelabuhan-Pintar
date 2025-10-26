@@ -14,12 +14,31 @@ namespace HarborFlow.Wpf.Views
 {
     public partial class MapView : UserControl
     {
-        private readonly MapViewModel _viewModel;
+        private MapViewModel? _viewModel;
         private bool _isWebViewInitialized = false;
 
-        public MapView(MapViewModel viewModel)
+        public MapView()
         {
             InitializeComponent();
+            // DataContext will be set by DataTemplate, then we'll initialize
+            DataContextChanged += MapView_DataContextChanged;
+        }
+
+        public MapView(MapViewModel viewModel) : this()
+        {
+            SetViewModel(viewModel);
+        }
+
+        private void MapView_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is MapViewModel viewModel && _viewModel == null)
+            {
+                SetViewModel(viewModel);
+            }
+        }
+
+        private void SetViewModel(MapViewModel viewModel)
+        {
             _viewModel = viewModel;
             DataContext = _viewModel;
 
@@ -34,6 +53,7 @@ namespace HarborFlow.Wpf.Views
 
         private async void InitializeWebViewAsync()
         {
+            if (_viewModel == null) return;
             await WebView.EnsureCoreWebView2Async(null);
             var mapHtmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot/map/index.html");
             WebView.CoreWebView2.Navigate(new Uri(mapHtmlPath).AbsoluteUri);
@@ -42,11 +62,13 @@ namespace HarborFlow.Wpf.Views
 
         private void VesselsOnMap_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
+            if (_viewModel == null) return;
             UpdateVesselsOnMapAsync(_viewModel.FilteredVesselsOnMap);
         }
 
         private void SearchResults_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
+            if (_viewModel == null) return;
             UpdateVesselsOnMapAsync(_viewModel.SearchResults);
         }
 

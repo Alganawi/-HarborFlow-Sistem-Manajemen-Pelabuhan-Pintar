@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <Resource Include="Assets/Images/AuthorizationBackground.jpg" />
+    <Resource Include="Assets/Images/Harbor.jpg" />
   </ItemGroup>
 
 </Project>

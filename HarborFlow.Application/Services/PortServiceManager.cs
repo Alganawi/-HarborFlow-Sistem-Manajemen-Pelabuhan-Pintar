@@ -14,7 +14,6 @@ namespace HarborFlow.Application.Services
         private readonly ILogger<PortServiceManager> _logger;
         private readonly ISynchronizationService _syncService;
         private readonly INotificationHub _notificationHub;
-        private bool _isOnline = true;
 
         public PortServiceManager(HarborFlowDbContext context, ILogger<PortServiceManager> logger, ISynchronizationService syncService, INotificationHub notificationHub)
         {

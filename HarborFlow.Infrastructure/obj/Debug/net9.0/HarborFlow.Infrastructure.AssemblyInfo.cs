@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HarborFlow.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3016635844763ad3fdb9201866e156984be03c73")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+38eb5156790747f346b3441914d408a120da50b2")]
 [assembly: System.Reflection.AssemblyProductAttribute("HarborFlow.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HarborFlow.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

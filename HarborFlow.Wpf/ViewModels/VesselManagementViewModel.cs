@@ -20,7 +20,9 @@ namespace HarborFlow.Wpf.ViewModels
         private readonly INotificationService _notificationService;
         private readonly ILogger<VesselManagementViewModel> _logger;
         private readonly SessionContext _sessionContext;
-        private readonly MainWindowViewModel _mainWindowViewModel;
+        
+        // Event to notify when loading state changes
+        public event Action<bool>? LoadingStateChanged;
 
         public ObservableCollection<Vessel> Vessels { get; } = new ObservableCollection<Vessel>();
 
@@ -42,18 +44,33 @@ namespace HarborFlow.Wpf.ViewModels
         public ICommand EditVesselCommand { get; }
         public ICommand DeleteVesselCommand { get; }
 
-        public bool CanAddVessel => _sessionContext.CurrentUser?.Role == UserRole.Administrator;
-        public bool CanEditVessel => _sessionContext.CurrentUser?.Role == UserRole.Administrator;
-        public bool CanDeleteVessel => _sessionContext.CurrentUser?.Role == UserRole.Administrator;
+        public bool CanAddVessel => _sessionContext?.CurrentUser?.Role == UserRole.Administrator;
+        public bool CanEditVessel => _sessionContext?.CurrentUser?.Role == UserRole.Administrator;
+        public bool CanDeleteVessel => _sessionContext?.CurrentUser?.Role == UserRole.Administrator;
 
-        public VesselManagementViewModel(IVesselTrackingService vesselTrackingService, IWindowManager windowManager, INotificationService notificationService, ILogger<VesselManagementViewModel> logger, SessionContext sessionContext, MainWindowViewModel mainWindowViewModel)
+        // Design-time constructor for XAML designer
+        public VesselManagementViewModel()
+        {
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
+                RefreshVesselsCommand = new RelayCommand(_ => { });
+                AddVesselCommand = new RelayCommand(_ => { });
+                EditVesselCommand = new RelayCommand(_ => { });
+                DeleteVesselCommand = new RelayCommand(_ => { });
+                return; // Exit early for design mode
+            }
+            
+            // This will not be reached in design mode, but needed to satisfy compiler
+            throw new InvalidOperationException("This constructor should only be used in design mode.");
+        }
+
+        public VesselManagementViewModel(IVesselTrackingService vesselTrackingService, IWindowManager windowManager, INotificationService notificationService, ILogger<VesselManagementViewModel> logger, SessionContext sessionContext)
         {
             _vesselTrackingService = vesselTrackingService;
             _windowManager = windowManager;
             _notificationService = notificationService;
             _logger = logger;
             _sessionContext = sessionContext;
-            _mainWindowViewModel = mainWindowViewModel;
             RefreshVesselsCommand = new AsyncRelayCommand(_ => LoadVesselsAsync());
             AddVesselCommand = new AsyncRelayCommand(_ => AddVessel(), _ => CanAddVessel);
             EditVesselCommand = new AsyncRelayCommand(_ => EditVessel(), _ => SelectedVessel != null && CanEditVessel);
@@ -62,7 +79,7 @@ namespace HarborFlow.Wpf.ViewModels
 
         public async Task LoadVesselsAsync()
         {
-            _mainWindowViewModel.IsLoading = true;
+            LoadingStateChanged?.Invoke(true);
             try
             {
                 Vessels.Clear();
@@ -79,7 +96,7 @@ namespace HarborFlow.Wpf.ViewModels
             }
             finally
             {
-                _mainWindowViewModel.IsLoading = false;
+                LoadingStateChanged?.Invoke(false);
             }
         }
 
@@ -89,7 +106,7 @@ namespace HarborFlow.Wpf.ViewModels
             var dialogResult = _windowManager.ShowVesselEditorDialog(newVessel);
             if (dialogResult == true)
             {
-                _mainWindowViewModel.IsLoading = true;
+                LoadingStateChanged?.Invoke(true);
                 try
                 {
                     await _vesselTrackingService.AddVesselAsync(newVessel);
@@ -103,7 +120,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    _mainWindowViewModel.IsLoading = false;
+                    LoadingStateChanged?.Invoke(false);
                 }
             }
         }
@@ -116,7 +133,7 @@ namespace HarborFlow.Wpf.ViewModels
             var dialogResult = _windowManager.ShowVesselEditorDialog(vesselCopy);
             if (dialogResult == true)
             {
-                _mainWindowViewModel.IsLoading = true;
+                LoadingStateChanged?.Invoke(true);
                 try
                 {
                     await _vesselTrackingService.UpdateVesselAsync(vesselCopy);
@@ -130,7 +147,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    _mainWindowViewModel.IsLoading = false;
+                    LoadingStateChanged?.Invoke(false);
                 }
             }
         }
@@ -141,7 +158,7 @@ namespace HarborFlow.Wpf.ViewModels
             {
                 if (_notificationService.ShowConfirmation("Delete Vessel", $"Are you sure you want to delete {SelectedVessel.Name}?"))
                 {
-                    _mainWindowViewModel.IsLoading = true;
+                    LoadingStateChanged?.Invoke(true);
                     try
                     {
                         await _vesselTrackingService.DeleteVesselAsync(SelectedVessel.IMO);
@@ -155,7 +172,7 @@ namespace HarborFlow.Wpf.ViewModels
                     }
                     finally
                     {
-                        _mainWindowViewModel.IsLoading = false;
+                        LoadingStateChanged?.Invoke(false);
                     }
                 }
             }

@@ -1,26 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/HarborFlow.Core.csproj": {}
+    "C:\\Users\\LENOVO\\Documents\\wpfjun\\HarborFlow.Core\\HarborFlow.Core.csproj": {}
   },
   "projects": {
-    "/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/HarborFlow.Core.csproj": {
+    "C:\\Users\\LENOVO\\Documents\\wpfjun\\HarborFlow.Core\\HarborFlow.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/HarborFlow.Core.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\wpfjun\\HarborFlow.Core\\HarborFlow.Core.csproj",
         "projectName": "HarborFlow.Core",
-        "projectPath": "/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/HarborFlow.Core.csproj",
-        "packagesPath": "/Users/marseillosatrian/.nuget/packages/",
-        "outputPath": "/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/",
+        "projectPath": "C:\\Users\\LENOVO\\Documents\\wpfjun\\HarborFlow.Core\\HarborFlow.Core.csproj",
+        "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LENOVO\\Documents\\wpfjun\\HarborFlow.Core\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/marseillosatrian/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,7 +45,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net9.0": {
@@ -94,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

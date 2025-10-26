@@ -101,9 +101,10 @@ namespace HarborFlow.Wpf.ViewModels
 
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
+                var searchText = SearchText; // Local variable to avoid nullable warning
                 filteredArticles = filteredArticles.Where(a => 
-                    a.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                    (a.Description != null && a.Description.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                    a.Title?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true ||
+                    a.Description?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true
                 );
             }
 

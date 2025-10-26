@@ -42,27 +42,31 @@ namespace HarborFlow.Wpf
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
                     config.SetBasePath(Directory.GetCurrentDirectory());
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddLogging();
+                    
+                    // Register configuration
+                    services.AddSingleton<IConfiguration>(hostContext.Configuration);
+                    
                     services.AddSingleton<MainWindow>();
                     services.AddSingleton<MainWindowViewModel>();
                     services.AddSingleton<MapViewModel>();
                     services.AddSingleton<MapView>();
-                    services.AddTransient<DashboardViewModel>();
-                    services.AddTransient<DashboardView>();
-                    services.AddTransient<VesselManagementViewModel>();
-                    services.AddTransient<VesselManagementView>();
+                    services.AddSingleton<DashboardViewModel>();
+                    services.AddSingleton<DashboardView>();
+                    services.AddSingleton<VesselManagementViewModel>();
+                    services.AddSingleton<VesselManagementView>();
                     services.AddTransient<VesselEditorViewModel>();
                     services.AddTransient<VesselEditorView>();
                     services.AddTransient<VesselValidator>();
-                    services.AddTransient<ServiceRequestViewModel>();
-                    services.AddTransient<ServiceRequestView>();
+                    services.AddSingleton<ServiceRequestViewModel>();
+                    services.AddSingleton<ServiceRequestView>();
 
-                    services.AddTransient<NewsViewModel>();
-                    services.AddTransient<NewsView>();
+                    services.AddSingleton<NewsViewModel>();
+                    services.AddSingleton<NewsView>();
 
                     services.AddTransient<UserProfileViewModel>();
                     services.AddTransient<UserProfileView>();
@@ -87,6 +91,10 @@ namespace HarborFlow.Wpf
                     services.AddScoped<IPortServiceManager, PortServiceManager>();
                     services.AddScoped<IBookmarkService, BookmarkService>();
                     services.AddSingleton<IVesselTrackingService, VesselTrackingService>();
+                    services.AddSingleton<IAisStreamService, AisStreamService>();
+                    services.AddSingleton<IAisDataService, AisDataService>();
+                    services.AddSingleton<IUserProfileService, UserProfileService>();
+                    services.AddSingleton<IRssFeedManager, RssFeedManager>();
 
                     services.AddHttpClient<IRssService, RssService>();
 

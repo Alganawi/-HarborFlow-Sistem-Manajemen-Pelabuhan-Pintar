@@ -9,7 +9,7 @@
              d:DesignHeight="600" d:DesignWidth="900">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/Assets/Images/MainBackground.jpg" Stretch="UniformToFill" Opacity="0.1"/>
+            <ImageBrush ImageSource="/Assets/Images/Harbor.jpg" Stretch="UniformToFill" Opacity="0.1"/>
         </Grid.Background>
         
         <StackPanel>

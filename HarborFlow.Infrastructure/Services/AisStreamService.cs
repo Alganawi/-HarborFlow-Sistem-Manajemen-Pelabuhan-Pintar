@@ -13,11 +13,11 @@ namespace HarborFlow.Infrastructure.Services
 {
     public class AisStreamService : IAisStreamService
     {
-        public event Action<VesselPosition> PositionReceived;
+        public event Action<VesselPosition> PositionReceived = delegate { };
 
         private readonly ClientWebSocket _webSocket = new ClientWebSocket();
         private readonly IConfiguration _configuration;
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         public AisStreamService(IConfiguration configuration)
         {
@@ -26,6 +26,7 @@ namespace HarborFlow.Infrastructure.Services
 
         public async void Start()
         {
+            _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var apiKey = _configuration["ApiKeys:AisStream"];
             var uri = new Uri("wss://stream.aisstream.io/v0/stream");

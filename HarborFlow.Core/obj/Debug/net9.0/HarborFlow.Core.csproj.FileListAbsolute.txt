@@ -11,3 +11,16 @@
 /Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/refint/HarborFlow.Core.dll
 /Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.pdb
 /Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/ref/HarborFlow.Core.dll
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\bin\Debug\net9.0\HarborFlow.Core.deps.json
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\bin\Debug\net9.0\HarborFlow.Core.dll
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\bin\Debug\net9.0\HarborFlow.Core.pdb
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\HarborFlow.Core.csproj.AssemblyReference.cache
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\HarborFlow.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\HarborFlow.Core.AssemblyInfoInputs.cache
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\HarborFlow.Core.AssemblyInfo.cs
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\HarborFlow.Core.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\HarborFlow.Core.sourcelink.json
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\HarborFlow.Core.dll
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\refint\HarborFlow.Core.dll
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\HarborFlow.Core.pdb
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\obj\Debug\net9.0\ref\HarborFlow.Core.dll

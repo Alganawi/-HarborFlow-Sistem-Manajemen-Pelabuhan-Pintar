@@ -16,19 +16,22 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using LiveCharts;
 using LiveCharts.Wpf;
+using LiveCharts.Definitions.Series;
 
 namespace HarborFlow.Wpf.ViewModels
 {
     public class DashboardViewModel : INotifyPropertyChanged
     {
-        private readonly IPortServiceManager _portServiceManager;
-        private readonly IVesselTrackingService _vesselTrackingService;
-        private readonly SessionContext _sessionContext;
-        private readonly INotificationService _notificationService;
-        private readonly ILogger<DashboardViewModel> _logger;
-        private readonly MainWindowViewModel _mainWindowViewModel;
-        private readonly IWindowManager _windowManager;
-        private readonly DispatcherTimer _onlineStatusTimer;
+        private readonly IPortServiceManager? _portServiceManager;
+        private readonly IVesselTrackingService? _vesselTrackingService;
+        private readonly SessionContext? _sessionContext;
+        private readonly INotificationService? _notificationService;
+        private readonly ILogger<DashboardViewModel>? _logger;
+        // Event to notify when loading state changes
+        public event Action<bool>? LoadingStateChanged;
+
+        private readonly IWindowManager? _windowManager;
+        private readonly DispatcherTimer? _onlineStatusTimer;
 
         private int _vesselCount;
         public int VesselCount
@@ -58,21 +61,37 @@ namespace HarborFlow.Wpf.ViewModels
             set { _onlineStatusColor = value; OnPropertyChanged(); }
         }
 
-        public SeriesCollection ServiceRequestStatusSeries { get; private set; }
-        public SeriesCollection VesselTypeSeries { get; private set; }
-        public string[] VesselTypeLabels { get; private set; }
+        public SeriesCollection ServiceRequestStatusSeries { get; private set; } = new SeriesCollection();
+        public SeriesCollection VesselTypeSeries { get; private set; } = new SeriesCollection();
+        public string[] VesselTypeLabels { get; private set; } = Array.Empty<string>();
 
-        public ICommand RefreshCommand { get; }
-        public ICommand ShowUserProfileCommand { get; }
+        public ICommand RefreshCommand { get; private set; }
+        public ICommand ShowUserProfileCommand { get; private set; }
 
-        public DashboardViewModel(IPortServiceManager portServiceManager, IVesselTrackingService vesselTrackingService, SessionContext sessionContext, INotificationService notificationService, ILogger<DashboardViewModel> logger, MainWindowViewModel mainWindowViewModel, IWindowManager windowManager)
+        // Design-time constructor for XAML designer
+        public DashboardViewModel()
+        {
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
+                RefreshCommand = new RelayCommand(_ => { });
+                ShowUserProfileCommand = new RelayCommand(_ => { });
+                OnlineStatus = "Design Mode";
+                VesselCount = 25;
+                ActiveServiceRequestCount = 8;
+                return; // Exit early for design mode
+            }
+            
+            // This will not be reached in design mode, but needed to satisfy compiler
+            throw new InvalidOperationException("This constructor should only be used in design mode.");
+        }
+
+        public DashboardViewModel(IPortServiceManager portServiceManager, IVesselTrackingService vesselTrackingService, SessionContext sessionContext, INotificationService notificationService, ILogger<DashboardViewModel> logger, IWindowManager windowManager)
         {
             _portServiceManager = portServiceManager;
             _vesselTrackingService = vesselTrackingService;
             _sessionContext = sessionContext;
             _notificationService = notificationService;
             _logger = logger;
-            _mainWindowViewModel = mainWindowViewModel;
             _windowManager = windowManager;
 
             ServiceRequestStatusSeries = new SeriesCollection();
@@ -106,14 +125,17 @@ namespace HarborFlow.Wpf.ViewModels
 
         private void ShowUserProfile()
         {
-            _windowManager.ShowUserProfileDialog();
+            _windowManager?.ShowUserProfileDialog();
         }
 
-        public async Task LoadDataAsync()
+        private async Task LoadDataAsync()
         {
-            _mainWindowViewModel.IsLoading = true;
+            LoadingStateChanged?.Invoke(true);
             try
             {
+                if (_vesselTrackingService == null || _portServiceManager == null || _sessionContext == null || _logger == null)
+                    return; // Design-time mode or not properly initialized
+
                 var vessels = await _vesselTrackingService.GetAllVesselsAsync();
                 VesselCount = vessels.Count();
                 UpdateVesselTypeChart(vessels);
@@ -127,12 +149,12 @@ namespace HarborFlow.Wpf.ViewModels
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to load dashboard data.");
+                _logger?.LogError(ex, "Failed to load dashboard data.");
                 
             }
             finally
             {
-                _mainWindowViewModel.IsLoading = false;
+                LoadingStateChanged?.Invoke(false);
             }
         }
 

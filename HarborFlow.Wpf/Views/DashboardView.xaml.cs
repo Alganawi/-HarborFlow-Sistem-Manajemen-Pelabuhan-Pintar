@@ -5,11 +5,16 @@ namespace HarborFlow.Wpf.Views
 {
     public partial class DashboardView : UserControl
     {
-        public DashboardView(DashboardViewModel viewModel)
+        public DashboardView()
         {
-            InitializeComponent();
+           InitializeComponent();
+            // DataContext will be set by the DataTemplate
+        }
+        
+        public DashboardView(DashboardViewModel viewModel) : this()
+        {
             DataContext = viewModel;
-            Loaded += async (s, e) => await viewModel.LoadDataAsync();
+            Loaded += (s, e) => viewModel.RefreshCommand?.Execute(null);
         }
     }
 }

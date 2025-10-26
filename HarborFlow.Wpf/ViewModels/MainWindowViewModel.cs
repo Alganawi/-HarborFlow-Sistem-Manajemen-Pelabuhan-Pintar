@@ -64,8 +64,8 @@ namespace HarborFlow.Wpf.ViewModels
         private DispatcherTimer _notificationTimer;
         private DispatcherTimer _onlineStatusTimer;
 
-        private PathGeometry _themeIcon;
-        public PathGeometry ThemeIcon
+        private Geometry _themeIcon;
+        public Geometry ThemeIcon
         {
             get => _themeIcon;
             set
@@ -180,6 +180,15 @@ namespace HarborFlow.Wpf.ViewModels
 
             notificationHub.NotificationReceived += OnNotificationReceived;
             _sessionContext.UserChanged += SessionContext_UserChanged;
+            
+            // Subscribe to dashboard loading state changes
+            _dashboardViewModel.LoadingStateChanged += (isLoading) => IsLoading = isLoading;
+            
+            // Subscribe to service request loading state changes
+            _serviceRequestViewModel.LoadingStateChanged += (isLoading) => IsLoading = isLoading;
+            
+            // Subscribe to vessel management loading state changes
+            _vesselManagementViewModel.LoadingStateChanged += (isLoading) => IsLoading = isLoading;
 
             LogoutCommand = new RelayCommand(_ => _sessionContext.CurrentUser = null); // Simplified logout
             LoginCommand = new RelayCommand(_ => _windowManager.ShowLoginWindow());
@@ -267,7 +276,7 @@ namespace HarborFlow.Wpf.ViewModels
         private void UpdateThemeIcon(ThemeType theme)
         {
             var iconKey = theme == ThemeType.Light ? "MoonIcon" : "SunIcon";
-            ThemeIcon = (PathGeometry)System.Windows.Application.Current.FindResource(iconKey);
+            ThemeIcon = (Geometry)System.Windows.Application.Current.FindResource(iconKey);
         }
 
         private void OnNotificationReceived(string message, NotificationType type)
