@@ -22,6 +22,8 @@ namespace HarborFlow.Wpf.ViewModels
         private readonly ILogger<MapViewModel> _logger;
         private readonly IBookmarkService _bookmarkService;
         private readonly SessionContext _sessionContext;
+        private readonly IWeatherService _weatherService;
+        private readonly IPortDataService _portDataService;
 
         private string _searchTerm;
         private Vessel? _selectedVessel;
@@ -136,14 +138,17 @@ namespace HarborFlow.Wpf.ViewModels
         }
 
         public ObservableCollection<Vessel> FilteredVesselsOnMap { get; } = new ObservableCollection<Vessel>();
+        public ObservableCollection<Port> Ports { get; } = new ObservableCollection<Port>();
 
-        public MapViewModel(IVesselTrackingService vesselTrackingService, INotificationService notificationService, ILogger<MapViewModel> logger, IBookmarkService bookmarkService, SessionContext sessionContext)
+        public MapViewModel(IVesselTrackingService vesselTrackingService, INotificationService notificationService, ILogger<MapViewModel> logger, IBookmarkService bookmarkService, SessionContext sessionContext, IWeatherService weatherService, IPortDataService portDataService)
         {
             _vesselTrackingService = vesselTrackingService;
             _notificationService = notificationService;
             _logger = logger;
             _bookmarkService = bookmarkService;
             _sessionContext = sessionContext;
+            _weatherService = weatherService;
+            _portDataService = portDataService;
 
             _searchTerm = string.Empty;
             Suggestions = new ObservableCollection<string>();
@@ -161,15 +166,40 @@ namespace HarborFlow.Wpf.ViewModels
 
             UpdateFilteredVessels();
             OnUserChanged(); // Initial check
+            _ = LoadPortsAsync();
 
             var boundingBoxes = new[] { new[] { -15.0, 90.0 }, new[] { 20.0, 150.0 } };
             _ = _vesselTrackingService.StartTracking(boundingBoxes);
         }
 
+        private async Task LoadPortsAsync()
+        {
+            try
+            {
+                var ports = await _portDataService.GetPortsAsync();
+                foreach (var port in ports)
+                {
+                    Ports.Add(port);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load ports.");
+            }
+        }
+
+        public async Task<WeatherData?> GetWeatherForVesselAsync(Vessel vessel)
+        {
+            var lastPosition = vessel.Positions.OrderByDescending(p => p.PositionTimestamp).FirstOrDefault();
+            if (lastPosition != null)
+            {
+                return await _weatherService.GetWeatherForLocationAsync((double)lastPosition.Latitude, (double)lastPosition.Longitude);
+            }
+            return null;
+        }
+
         private async Task AddBookmarkAsync()
         {
-            // In a real app, we'd use a dialog to get the name and bounds.
-            // For now, we'll use a default name and placeholder bounds.
             if (_sessionContext.CurrentUser == null) return;
 
             var newBookmark = new MapBookmark

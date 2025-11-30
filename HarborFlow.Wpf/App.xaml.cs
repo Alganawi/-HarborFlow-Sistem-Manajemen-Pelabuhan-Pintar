@@ -20,6 +20,8 @@ using Microsoft.Extensions.Logging;
 using System.Windows.Threading;
 using HarborFlow.Core.Models;
 
+using Serilog;
+
 namespace HarborFlow.Wpf
 {
     public enum ThemeType
@@ -39,29 +41,39 @@ namespace HarborFlow.Wpf
         public App()
         {
             AppHost = Host.CreateDefaultBuilder()
+                .UseSerilog((context, services, configuration) => configuration
+                    .ReadFrom.Configuration(context.Configuration)
+                    .ReadFrom.Services(services)
+                    .Enrich.FromLogContext())
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
                     config.SetBasePath(Directory.GetCurrentDirectory());
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddLogging();
+                    services.AddSingleton<IConfiguration>(hostContext.Configuration);
+                    
                     services.AddSingleton<MainWindow>();
-                    services.AddSingleton<MainWindowViewModel>();
+                    
+                    // Register ViewModels as Singletons to avoid circular dependency issues
+                    services.AddSingleton<DashboardViewModel>();
+                    services.AddSingleton<ServiceRequestViewModel>();
+                    services.AddSingleton<VesselManagementViewModel>();
                     services.AddSingleton<MapViewModel>();
+                    services.AddSingleton<NewsViewModel>();
+                    services.AddSingleton<MainWindowViewModel>();
+                    
+                    // Views can remain transient
                     services.AddSingleton<MapView>();
-                    services.AddTransient<DashboardViewModel>();
                     services.AddTransient<DashboardView>();
-                    services.AddTransient<VesselManagementViewModel>();
                     services.AddTransient<VesselManagementView>();
                     services.AddTransient<VesselEditorViewModel>();
                     services.AddTransient<VesselEditorView>();
                     services.AddTransient<VesselValidator>();
-                    services.AddTransient<ServiceRequestViewModel>();
                     services.AddTransient<ServiceRequestView>();
 
-                    services.AddTransient<NewsViewModel>();
                     services.AddTransient<NewsView>();
 
                     services.AddTransient<UserProfileViewModel>();
@@ -83,15 +95,18 @@ namespace HarborFlow.Wpf
                     services.AddSingleton<ICachingService, CachingService>();
                     services.AddSingleton<ISynchronizationService, SynchronizationService>();
                     services.AddSingleton<INotificationHub, NotificationHub>();
+                    services.AddSingleton<IAisStreamService, AisStreamService>();
 
                     services.AddScoped<IPortServiceManager, PortServiceManager>();
                     services.AddScoped<IBookmarkService, BookmarkService>();
                     services.AddSingleton<IVesselTrackingService, VesselTrackingService>();
 
                     services.AddHttpClient<IRssService, RssService>();
+                    services.AddHttpClient<IWeatherService, OpenMeteoWeatherService>();
+                    services.AddSingleton<IPortDataService, PortDataService>();
 
                     services.AddDbContext<HarborFlowDbContext>(options =>
-                        options.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection")));
+                        options.UseSqlite(hostContext.Configuration.GetConnectionString("DefaultConnection")));
                 })
                 .Build();
 
@@ -104,6 +119,13 @@ namespace HarborFlow.Wpf
         {
             DispatcherUnhandledException += OnDispatcherUnhandledException;
             await AppHost!.StartAsync();
+
+            // Apply migrations at startup
+            using (var scope = AppHost.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<HarborFlowDbContext>();
+                await dbContext.Database.MigrateAsync();
+            }
 
             var windowManager = AppHost.Services.GetRequiredService<IWindowManager>();
                         windowManager.ShowMainWindow();

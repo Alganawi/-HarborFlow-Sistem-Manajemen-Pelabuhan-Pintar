@@ -63,9 +63,9 @@ namespace HarborFlow.Tests.ViewModels
             );
 
             _mapViewModel = new MapViewModel(_vesselTrackingServiceMock.Object, _notificationServiceMock.Object, loggerMapMock.Object, _bookmarkServiceMock.Object, _sessionContext);
-            _dashboardViewModel = new DashboardViewModel(_portServiceManagerMock.Object, _vesselTrackingServiceMock.Object, _sessionContext, _notificationServiceMock.Object, loggerDashboardMock.Object, mockMainWindowVm.Object, _windowManagerMock.Object);
-            _serviceRequestViewModel = new ServiceRequestViewModel(_portServiceManagerMock.Object, _windowManagerMock.Object, _notificationServiceMock.Object, loggerServiceRequestMock.Object, _sessionContext, mockMainWindowVm.Object);
-            _vesselManagementViewModel = new VesselManagementViewModel(_vesselTrackingServiceMock.Object, _windowManagerMock.Object, _notificationServiceMock.Object, loggerVesselManagementMock.Object, _sessionContext, mockMainWindowVm.Object);
+            _dashboardViewModel = new DashboardViewModel(_portServiceManagerMock.Object, _vesselTrackingServiceMock.Object, _sessionContext, _notificationServiceMock.Object, loggerDashboardMock.Object, _windowManagerMock.Object);
+            _serviceRequestViewModel = new ServiceRequestViewModel(_portServiceManagerMock.Object, _windowManagerMock.Object, _notificationServiceMock.Object, loggerServiceRequestMock.Object, _sessionContext);
+            _vesselManagementViewModel = new VesselManagementViewModel(_vesselTrackingServiceMock.Object, _windowManagerMock.Object, _notificationServiceMock.Object, loggerVesselManagementMock.Object, _sessionContext);
             _newsViewModel = new NewsViewModel(_rssServiceMock.Object, _configurationMock.Object, _loggerNewsMock.Object);
 
             _viewModel = new MainWindowViewModel(

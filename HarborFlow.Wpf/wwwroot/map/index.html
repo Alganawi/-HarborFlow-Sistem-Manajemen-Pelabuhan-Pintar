@@ -30,6 +30,7 @@
     <script>
         let map;
         let vesselLayer = L.markerClusterGroup();
+        let portLayer = L.layerGroup();
         let historyLayer = L.layerGroup();
         let baseLayers = {};
 
@@ -54,6 +55,7 @@
 
             baseLayers["Street"].addTo(map);
             vesselLayer.addTo(map);
+            portLayer.addTo(map);
             historyLayer.addTo(map);
         }
 
@@ -76,7 +78,6 @@
                 if (vessel.Latitude != null && vessel.Longitude != null) {
                     const color = getVesselColor(vessel);
                     const course = vessel.Course || 0;
-
                     const icon = L.divIcon({
                         className: 'vessel-icon',
                         html: `<div style="font-size: 24px; color: ${color}; transform: rotate(${course}deg);">&#9650;</div>`,
@@ -100,6 +101,30 @@
             });
         }
 
+        // Called from C# to update port markers
+        function updatePorts(portDataJson) {
+            portLayer.clearLayers();
+            const ports = JSON.parse(portDataJson);
+            
+            ports.forEach(port => {
+                if (port.Latitude != null && port.Longitude != null) {
+                    const icon = L.divIcon({
+                        className: 'port-icon',
+                        html: `<div style="font-size: 20px; color: darkred;">&#9875;</div>`, // Anchor symbol
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+
+                    const marker = L.marker([port.Latitude, port.Longitude], { icon: icon });
+                    
+                    let popupContent = `<b>${port.Name}</b><br>Code: ${port.Code}<br>Country: ${port.Country}`;
+                    marker.bindPopup(popupContent);
+
+                    portLayer.addLayer(marker);
+                }
+            });
+        }
+
         // Called from C# to center the map on a specific vessel
         function centerOnVessel(lat, lon) {
             if (map) {
@@ -112,6 +137,24 @@
             vesselLayer.eachLayer(function (layer) {
                 if (layer.getLatLng().lat == lat && layer.getLatLng().lng == lon) {
                     layer.openPopup();
+                }
+            });
+        }
+
+        // Called from C# to update popup content with weather data
+        function updateVesselPopupContent(lat, lon, additionalHtml) {
+            vesselLayer.eachLayer(function (layer) {
+                if (layer.getLatLng().lat == lat && layer.getLatLng().lng == lon) {
+                    var popup = layer.getPopup();
+                    if (popup) {
+                        var currentContent = popup.getContent();
+                        if (!currentContent.includes("Weather:")) { // Avoid duplicates
+                            popup.setContent(currentContent + additionalHtml);
+                            if (layer.isPopupOpen()) {
+                                layer.openPopup(); // Refresh popup size/layout
+                            }
+                        }
+                    }
                 }
             });
         }

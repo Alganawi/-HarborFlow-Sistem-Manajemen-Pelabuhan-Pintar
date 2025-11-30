@@ -11,6 +11,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
             <ControlTemplate x:Key="ValidationErrorTemplate">
                 <DockPanel>

@@ -14,22 +14,79 @@ namespace HarborFlow.Wpf.Views
 {
     public partial class MapView : UserControl
     {
-        private readonly MapViewModel _viewModel;
+        private MapViewModel? _viewModel;
         private bool _isWebViewInitialized = false;
 
-        public MapView(MapViewModel viewModel)
+        // Parameterless constructor for XAML
+        public MapView()
         {
             InitializeComponent();
+            DataContextChanged += MapView_DataContextChanged;
+        }
+
+        // Constructor for dependency injection
+        public MapView(MapViewModel viewModel) : this()
+        {
+            SetViewModel(viewModel);
+        }
+
+        private void MapView_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is MapViewModel vm)
+            {
+                SetViewModel(vm);
+            }
+        }
+
+        private void SetViewModel(MapViewModel viewModel)
+        {
+            if (_viewModel != null)
+            {
+                // Unsubscribe from old ViewModel
+                _viewModel.FilteredVesselsOnMap.CollectionChanged -= VesselsOnMap_CollectionChanged;
+                _viewModel.SearchResults.CollectionChanged -= SearchResults_CollectionChanged;
+                _viewModel.VesselSelected -= ViewModel_VesselSelected;
+                _viewModel.HistoryTrackRequested -= ViewModel_HistoryTrackRequested;
+                _viewModel.MapLayerChanged -= ViewModel_MapLayerChanged;
+            }
+
             _viewModel = viewModel;
             DataContext = _viewModel;
 
-            InitializeWebViewAsync();
+            if (_viewModel != null)
+            {
+                InitializeWebViewAsync();
 
-            _viewModel.FilteredVesselsOnMap.CollectionChanged += VesselsOnMap_CollectionChanged;
-            _viewModel.SearchResults.CollectionChanged += SearchResults_CollectionChanged;
-            _viewModel.VesselSelected += ViewModel_VesselSelected;
-            _viewModel.HistoryTrackRequested += ViewModel_HistoryTrackRequested;
-            _viewModel.MapLayerChanged += ViewModel_MapLayerChanged;
+                _viewModel.FilteredVesselsOnMap.CollectionChanged += VesselsOnMap_CollectionChanged;
+                _viewModel.SearchResults.CollectionChanged += SearchResults_CollectionChanged;
+                _viewModel.VesselSelected += ViewModel_VesselSelected;
+                _viewModel.HistoryTrackRequested += ViewModel_HistoryTrackRequested;
+                _viewModel.MapLayerChanged += ViewModel_MapLayerChanged;
+                _viewModel.Ports.CollectionChanged += Ports_CollectionChanged;
+            }
+        }
+
+        private void Ports_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_viewModel != null)
+                UpdatePortsOnMapAsync(_viewModel.Ports);
+        }
+
+        private async void UpdatePortsOnMapAsync(IEnumerable<Port> ports)
+        {
+            if (!_isWebViewInitialized) return;
+
+            var portData = ports.Select(p => new
+            {
+                p.Name,
+                p.Latitude,
+                p.Longitude,
+                p.Country,
+                p.Code
+            }).ToList();
+
+            var json = JsonSerializer.Serialize(portData);
+            await WebView.CoreWebView2.ExecuteScriptAsync($"updatePorts('{json}')");
         }
 
         private async void InitializeWebViewAsync()
@@ -38,16 +95,22 @@ namespace HarborFlow.Wpf.Views
             var mapHtmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot/map/index.html");
             WebView.CoreWebView2.Navigate(new Uri(mapHtmlPath).AbsoluteUri);
             _isWebViewInitialized = true;
+            if (_viewModel != null)
+            {
+                UpdatePortsOnMapAsync(_viewModel.Ports);
+            }
         }
 
         private void VesselsOnMap_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            UpdateVesselsOnMapAsync(_viewModel.FilteredVesselsOnMap);
+            if (_viewModel != null)
+                UpdateVesselsOnMapAsync(_viewModel.FilteredVesselsOnMap);
         }
 
         private void SearchResults_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            UpdateVesselsOnMapAsync(_viewModel.SearchResults);
+            if (_viewModel != null)
+                UpdateVesselsOnMapAsync(_viewModel.SearchResults);
         }
 
         private async void UpdateVesselsOnMapAsync(IEnumerable<Vessel> vessels)
@@ -74,13 +137,21 @@ namespace HarborFlow.Wpf.Views
 
         private async void ViewModel_VesselSelected(object? sender, Vessel e)
         {
-            if (!_isWebViewInitialized) return;
+            if (!_isWebViewInitialized || _viewModel == null) return;
 
             var lastPosition = e.Positions.OrderByDescending(p => p.PositionTimestamp).FirstOrDefault();
             if (lastPosition != null)
             {
                 await WebView.CoreWebView2.ExecuteScriptAsync($"centerOnVessel({lastPosition.Latitude}, {lastPosition.Longitude})");
                 await WebView.CoreWebView2.ExecuteScriptAsync($"openVesselPopup({lastPosition.Latitude}, {lastPosition.Longitude})");
+
+                // Fetch weather data
+                var weather = await _viewModel.GetWeatherForVesselAsync(e);
+                if (weather != null)
+                {
+                    var weatherHtml = $"<br/><b>Weather:</b> {weather.Temperature}°C, Wind: {weather.WindSpeed} km/h";
+                    await WebView.CoreWebView2.ExecuteScriptAsync($"updateVesselPopupContent({lastPosition.Latitude}, {lastPosition.Longitude}, '{weatherHtml}')");
+                }
             }
         }
 

@@ -31,13 +31,23 @@ namespace HarborFlow.Wpf.ViewModels
         public string Username
         {
             get => _username;
-            set { _username = value; OnPropertyChanged(nameof(Username)); }
+            set 
+            { 
+                _username = value; 
+                OnPropertyChanged(nameof(Username));
+                ((AsyncRelayCommand)RegisterCommand).RaiseCanExecuteChanged();
+            }
         }
 
         public string Password
         {
             get => _password;
-            set { _password = value; OnPropertyChanged(nameof(Password)); }
+            set 
+            { 
+                _password = value; 
+                OnPropertyChanged(nameof(Password));
+                ((AsyncRelayCommand)RegisterCommand).RaiseCanExecuteChanged();
+            }
         }
 
         public string ConfirmPassword
@@ -80,13 +90,16 @@ namespace HarborFlow.Wpf.ViewModels
 
         private bool CanRegister(object? parameter)
         {
-            return !string.IsNullOrWhiteSpace(Username) && 
+            var canExecute = !string.IsNullOrWhiteSpace(Username) && 
                    !string.IsNullOrWhiteSpace(Password) && 
                    !IsLoading;
+            System.Diagnostics.Debug.WriteLine($"CanRegister: {canExecute} (Username: '{Username}', Password: '{(string.IsNullOrWhiteSpace(Password) ? "empty" : "filled")}', IsLoading: {IsLoading})");
+            return canExecute;
         }
 
         public async Task Register()
         {
+            System.Diagnostics.Debug.WriteLine("Register method called!");
             IsLoading = true;
             ((AsyncRelayCommand)RegisterCommand).RaiseCanExecuteChanged();
 

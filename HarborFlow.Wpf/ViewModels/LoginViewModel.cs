@@ -18,7 +18,22 @@ namespace HarborFlow.Wpf.ViewModels
         private readonly SessionContext _sessionContext;
         private readonly INotificationService _notificationService;
         private readonly ILogger<LoginViewModel> _logger;
-        private readonly MainWindowViewModel _mainWindowViewModel;
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+                (LoginCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
+                LoadingStateChanged?.Invoke(this, value);
+            }
+        }
+
+        // Event to notify MainWindowViewModel about loading state changes
+        public event EventHandler<bool>? LoadingStateChanged;
 
         private string _username = string.Empty;
         public string Username
@@ -58,26 +73,25 @@ namespace HarborFlow.Wpf.ViewModels
         public ICommand LoginCommand { get; }
         public ICommand OpenRegisterWindowCommand { get; }
 
-        public LoginViewModel(IAuthService authService, IWindowManager windowManager, SessionContext sessionContext, INotificationService notificationService, ILogger<LoginViewModel> logger, MainWindowViewModel mainWindowViewModel)
+        public LoginViewModel(IAuthService authService, IWindowManager windowManager, SessionContext sessionContext, INotificationService notificationService, ILogger<LoginViewModel> logger)
         {
             _authService = authService;
             _windowManager = windowManager;
             _sessionContext = sessionContext;
             _notificationService = notificationService;
             _logger = logger;
-            _mainWindowViewModel = mainWindowViewModel;
             LoginCommand = new AsyncRelayCommand(Login, CanLogin);
             OpenRegisterWindowCommand = new RelayCommand(_ => _windowManager.ShowRegisterWindow());
         }
 
         private bool CanLogin(object? parameter)
         {
-            return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !_mainWindowViewModel.IsLoading;
+            return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !IsLoading;
         }
 
         private async Task Login(object? parameter)
         {
-            _mainWindowViewModel.IsLoading = true;
+            IsLoading = true;
             (LoginCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
             ErrorMessage = string.Empty;
 
@@ -102,7 +116,7 @@ namespace HarborFlow.Wpf.ViewModels
             finally
             {
                 Password = string.Empty; // Clear password after login attempt
-                _mainWindowViewModel.IsLoading = false;
+                IsLoading = false;
                 (LoginCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
             }
         }

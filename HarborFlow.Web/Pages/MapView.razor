@@ -5,6 +5,7 @@
 @using HarborFlow.Core.Interfaces
 @using HarborFlow.Core.Models
 @inject IVesselTrackingService VesselTrackingService
+@inject IWeatherService WeatherService
 @inject Microsoft.JSInterop.IJSRuntime JSRuntime
 
 <h3>Vessel Map</h3>
@@ -47,10 +48,16 @@
                 var lastPosition = vessel.Positions.OrderByDescending(p => p.PositionTimestamp).FirstOrDefault();
                 if (lastPosition != null)
                 {
+                    // Fetch weather data for the vessel's location
+                    var weather = await WeatherService.GetWeatherForLocationAsync((double)lastPosition.Latitude, (double)lastPosition.Longitude);
+                    var weatherInfo = weather != null 
+                        ? $"<br/>Weather: {weather.Temperature}°C, Wind: {weather.WindSpeed} km/h" 
+                        : "";
+
                     _map.AddLayer(new Marker(new LatLng((float)lastPosition.Latitude, (float)lastPosition.Longitude))
                     {
                         Tooltip = new Tooltip { Content = vessel.Name },
-                        Popup = new Popup { Content = $"IMO: {vessel.IMO}<br/>Name: {vessel.Name}<br/>Speed: {lastPosition.SpeedOverGround} knots" }
+                        Popup = new Popup { Content = $"IMO: {vessel.IMO}<br/>Name: {vessel.Name}<br/>Speed: {lastPosition.SpeedOverGround} knots{weatherInfo}" }
                     });
                 }
             }

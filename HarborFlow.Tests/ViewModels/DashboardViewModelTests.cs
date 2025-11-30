@@ -40,7 +40,6 @@ namespace HarborFlow.Tests.ViewModels
                 _sessionContext,
                 _notificationServiceMock.Object,
                 _loggerMock.Object,
-                _mainWindowViewModelMock.Object,
                 _windowManagerMock.Object);
         }
 

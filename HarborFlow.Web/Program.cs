@@ -20,6 +20,7 @@ builder.Services.AddHttpClient();
 // Register application services
 builder.Services.AddScoped<IVesselTrackingService, VesselTrackingService>();
 builder.Services.AddScoped<IPortServiceManager, PortServiceManager>();
+builder.Services.AddScoped<IWeatherService, OpenMeteoWeatherService>();
 
 var app = builder.Build();
 

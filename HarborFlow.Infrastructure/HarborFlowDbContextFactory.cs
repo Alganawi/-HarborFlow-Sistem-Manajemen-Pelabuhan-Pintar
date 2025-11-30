@@ -24,7 +24,7 @@ namespace HarborFlow.Infrastructure
             var optionsBuilder = new DbContextOptionsBuilder<HarborFlowDbContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseSqlite(connectionString);
 
             return new HarborFlowDbContext(optionsBuilder.Options);
         }

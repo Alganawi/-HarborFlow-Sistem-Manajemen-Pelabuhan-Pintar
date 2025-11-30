@@ -27,7 +27,6 @@
     <ProjectReference Include="..\HarborFlow.Core\HarborFlow.Core.csproj" />
     <ProjectReference Include="..\HarborFlow.Application\HarborFlow.Application.csproj" />
     <ProjectReference Include="..\HarborFlow.Infrastructure\HarborFlow.Infrastructure.csproj" />
-    <ProjectReference Include="..\HarborFlow.Web\HarborFlow.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

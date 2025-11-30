@@ -1,15 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/packages
-/node_modules
-
-# build results
-[Bb]in/
-[Oo]bj/
-
-# Rider
-.idea/
-*.sln.iml
-*.suo
+.vs/
+bin/
+obj/
+Publish/
+*.db
+*.log
 *.user
+*.suo

@@ -11,54 +11,97 @@
         Width="960"
         WindowStartupLocation="CenterScreen">
     <Window.Background>
-        <ImageBrush ImageSource="/Assets/Images/AuthorizationBackground.jpg" Stretch="UniformToFill"/>
+        <DynamicResource ResourceKey="SidebarBackgroundBrush"/>
     </Window.Background>
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
     <Grid>
-        <Border Background="#D8FFFFFF" 
+        <Border Background="#F0FFFFFF" 
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
-                CornerRadius="10"
+                CornerRadius="12"
                 Padding="40"
-                MaxWidth="450">
+                Width="450">
             <Border.Effect>
-                <DropShadowEffect Color="#FFBBBBBB" Direction="320" ShadowDepth="5" BlurRadius="10" Opacity="0.5"/>
+                <DropShadowEffect Color="Black" Direction="270" ShadowDepth="10" BlurRadius="20" Opacity="0.3"/>
             </Border.Effect>
             <StackPanel>
-                <TextBlock Text="Create Account" 
-                           FontSize="28"
+                <TextBlock Text="HarborFlow" 
+                           FontSize="32"
                            FontWeight="Bold"
+                           Foreground="#FF052767"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,25"/>
+                           Margin="0,0,0,10"/>
 
-                <TextBlock Text="Username" Margin="0,0,0,5" FontWeight="SemiBold"/>
-                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15" Height="30"/>
+                <TextBlock Text="Create Account" 
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Foreground="#FF555555"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,30"/>
 
-                <TextBlock Text="Password" Margin="0,0,0,5" FontWeight="SemiBold"/>
-                <PasswordBox x:Name="PasswordBox" Margin="0,0,0,15" Height="30" PasswordChanged="PasswordBox_PasswordChanged"/>
+                <TextBlock Text="Username" Margin="0,0,0,5" FontWeight="SemiBold" Foreground="#FF333333"/>
+                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="0,0,0,15" 
+                         Height="35"
+                         Padding="5"
+                         VerticalContentAlignment="Center"
+                         BorderBrush="#FFCCCCCC"
+                         BorderThickness="1"/>
 
-                <TextBlock Text="Confirm Password" Margin="0,0,0,5" FontWeight="SemiBold"/>
-                <PasswordBox x:Name="ConfirmPasswordBox" Margin="0,0,0,15" Height="30" PasswordChanged="ConfirmPasswordBox_PasswordChanged"/>
+                <TextBlock Text="Password" Margin="0,0,0,5" FontWeight="SemiBold" Foreground="#FF333333"/>
+                <PasswordBox x:Name="PasswordBox" 
+                             Margin="0,0,0,15" 
+                             Height="35" 
+                             Padding="5"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#FFCCCCCC"
+                             BorderThickness="1"
+                             PasswordChanged="PasswordBox_PasswordChanged"/>
 
-                <TextBlock Text="Email" Margin="0,0,0,5" FontWeight="SemiBold"/>
-                <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,15" Height="30"/>
+                <TextBlock Text="Confirm Password" Margin="0,0,0,5" FontWeight="SemiBold" Foreground="#FF333333"/>
+                <PasswordBox x:Name="ConfirmPasswordBox" 
+                             Margin="0,0,0,15" 
+                             Height="35" 
+                             Padding="5"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#FFCCCCCC"
+                             BorderThickness="1"
+                             PasswordChanged="ConfirmPasswordBox_PasswordChanged"/>
 
-                <TextBlock Text="Full Name" Margin="0,0,0,5" FontWeight="SemiBold"/>
-                <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20" Height="30"/>
+                <TextBlock Text="Email" Margin="0,0,0,5" FontWeight="SemiBold" Foreground="#FF333333"/>
+                <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="0,0,0,15" 
+                         Height="35"
+                         Padding="5"
+                         VerticalContentAlignment="Center"
+                         BorderBrush="#FFCCCCCC"
+                         BorderThickness="1"/>
+
+                <TextBlock Text="Full Name" Margin="0,0,0,5" FontWeight="SemiBold" Foreground="#FF333333"/>
+                <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="0,0,0,20" 
+                         Height="35"
+                         Padding="5"
+                         VerticalContentAlignment="Center"
+                         BorderBrush="#FFCCCCCC"
+                         BorderThickness="1"/>
 
                 <Button Content="Register" 
                         Command="{Binding RegisterCommand}" 
                         Margin="0,10,0,0" 
                         Height="40" 
-                        FontWeight="Bold"/>
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        FontSize="16"/>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <TextBlock Text="Already have an account? " VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,25,0,0">
+                    <TextBlock Text="Already have an account? " VerticalAlignment="Center" Foreground="#FF555555"/>
                     <Button Content="Login"
                             Command="{Binding OpenLoginWindowCommand}"
-                            Style="{StaticResource HyperlinkButtonStyle}"/>
+                            Style="{StaticResource HyperlinkButtonStyle}"
+                            Foreground="#FF052767"
+                            FontWeight="SemiBold"/>
                 </StackPanel>
             </StackPanel>
         </Border>

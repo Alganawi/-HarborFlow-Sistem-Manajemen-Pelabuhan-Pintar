@@ -94,3 +94,15 @@
 /Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Web/bin/Debug/net9.0/System.ServiceModel.Syndication.dll
 /Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Web/bin/Debug/net9.0/HarborFlow.Application.dll
 /Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Web/bin/Debug/net9.0/HarborFlow.Application.pdb
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.csproj.AssemblyReference.cache
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.AssemblyInfoInputs.cache
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.AssemblyInfo.cs
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.RazorAssemblyInfo.cache
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.RazorAssemblyInfo.cs
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.sourcelink.json
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.dll
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\refint\HarborFlow.Web.dll
+C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Web\obj\Debug\net9.0\HarborFlow.Web.pdb

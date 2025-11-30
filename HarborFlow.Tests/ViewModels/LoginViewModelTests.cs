@@ -30,7 +30,13 @@ namespace HarborFlow.Tests.ViewModels
             _loggerMock = new Mock<ILogger<LoginViewModel>>();
             _sessionContext = new SessionContext();
             _mainWindowViewModelMock = new Mock<MainWindowViewModel>();
-            _viewModel = new LoginViewModel(_authServiceMock.Object, _windowManagerMock.Object, _sessionContext, _notificationServiceMock.Object, _loggerMock.Object, _mainWindowViewModelMock.Object);
+            
+            _viewModel = new LoginViewModel(
+                _authServiceMock.Object, 
+                _windowManagerMock.Object, 
+                _sessionContext, 
+                _notificationServiceMock.Object, 
+                _loggerMock.Object);
         }
 
         [Fact]

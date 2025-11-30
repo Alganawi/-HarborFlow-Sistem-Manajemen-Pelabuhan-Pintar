@@ -33,7 +33,13 @@ namespace HarborFlow.Tests.ViewModels
             _loggerMock = new Mock<ILogger<ServiceRequestViewModel>>();
             _sessionContext = new SessionContext { CurrentUser = new User { UserId = Guid.NewGuid(), Role = UserRole.Administrator } };
             _mainWindowViewModelMock = new Mock<MainWindowViewModel>();
-            _viewModel = new ServiceRequestViewModel(_portServiceManagerMock.Object, _windowManagerMock.Object, _notificationServiceMock.Object, _loggerMock.Object, _sessionContext, _mainWindowViewModelMock.Object);
+            
+            _viewModel = new ServiceRequestViewModel(
+                _portServiceManagerMock.Object, 
+                _windowManagerMock.Object, 
+                _notificationServiceMock.Object, 
+                _loggerMock.Object, 
+                _sessionContext);
         }
 
         [Fact]
