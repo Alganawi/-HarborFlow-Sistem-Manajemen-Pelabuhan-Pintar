@@ -7,7 +7,7 @@
 
 HarborFlow adalah sistem manajemen pelabuhan full-stack yang dibangun dengan .NET 9 (ASP.NET Core) untuk backend API dan React untuk frontend. Aplikasi ini menyediakan platform terpusat untuk mengelola alur kerja operasional pelabuhan, mulai dari permintaan layanan kapal hingga pembuatan faktur, dengan otentikasi berbasis peran untuk memastikan alur kerja yang aman dan efisien.
 
-## 2. Tim Pengembang (Kelompok 4)
+## Tim Pengembang (Kelompok 4)
 
 | Nama                   | Role                        | Tanggung Jawab Utama                                                         |
 | ---------------------- | --------------------------- | ---------------------------------------------------------------------------- |
