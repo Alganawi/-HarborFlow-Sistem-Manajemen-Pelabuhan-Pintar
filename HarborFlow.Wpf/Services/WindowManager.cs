@@ -37,7 +37,15 @@ namespace HarborFlow.Wpf.Services
         {
             if (_mainWindow == null)
             {
-                _mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                try
+                {
+                    _mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Error creating MainWindow: {ex.Message}\n\nInner: {ex.InnerException?.Message}", "DI Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    throw;
+                }
                 _mainWindow.Closed += (s, e) => _mainWindow = null;
             }
             _mainWindow.Show();

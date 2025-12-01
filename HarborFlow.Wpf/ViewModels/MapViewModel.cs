@@ -177,10 +177,13 @@ namespace HarborFlow.Wpf.ViewModels
             try
             {
                 var ports = await _portDataService.GetPortsAsync();
-                foreach (var port in ports)
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Ports.Add(port);
-                }
+                    foreach (var port in ports)
+                    {
+                        Ports.Add(port);
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -269,14 +272,18 @@ namespace HarborFlow.Wpf.ViewModels
 
         private void UpdateFilteredVessels()
         {
-            FilteredVesselsOnMap.Clear();
             var filtered = _vesselTrackingService.TrackedVessels
-                .Where(v => SelectedVesselTypeFilter == null || v.VesselType == SelectedVesselTypeFilter);
+                .Where(v => SelectedVesselTypeFilter == null || v.VesselType == SelectedVesselTypeFilter)
+                .ToList();
             
-            foreach (var vessel in filtered)
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                FilteredVesselsOnMap.Add(vessel);
-            }
+                FilteredVesselsOnMap.Clear();
+                foreach (var vessel in filtered)
+                {
+                    FilteredVesselsOnMap.Add(vessel);
+                }
+            });
         }
 
         private void SelectSuggestion(object? suggestion)
@@ -284,7 +291,7 @@ namespace HarborFlow.Wpf.ViewModels
             if (suggestion is string selectedVesselName)
             {
                 SearchTerm = selectedVesselName;
-                Suggestions.Clear();
+                System.Windows.Application.Current.Dispatcher.Invoke(() => Suggestions.Clear());
                 _ = SearchVesselsAsync();
             }
         }
@@ -295,16 +302,21 @@ namespace HarborFlow.Wpf.ViewModels
             {
                 if (string.IsNullOrWhiteSpace(SearchTerm))
                 {
-                    Suggestions.Clear();
+                    System.Windows.Application.Current.Dispatcher.Invoke(() => Suggestions.Clear());
                     return;
                 }
 
                 var results = await _vesselTrackingService.SearchVesselsAsync(SearchTerm);
-                Suggestions.Clear();
-                foreach (var vessel in results.Take(10))
+                var suggestions = results.Take(10).Select(v => v.Name).ToList();
+                
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Suggestions.Add(vessel.Name);
-                }
+                    Suggestions.Clear();
+                    foreach (var name in suggestions)
+                    {
+                        Suggestions.Add(name);
+                    }
+                });
             }
             catch (Exception ex)
             {

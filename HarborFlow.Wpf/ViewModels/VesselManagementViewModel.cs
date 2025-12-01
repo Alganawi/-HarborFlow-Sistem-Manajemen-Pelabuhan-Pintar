@@ -20,7 +20,7 @@ namespace HarborFlow.Wpf.ViewModels
         private readonly INotificationService _notificationService;
         private readonly ILogger<VesselManagementViewModel> _logger;
         private readonly SessionContext _sessionContext;
-
+        
         public ObservableCollection<Vessel> Vessels { get; } = new ObservableCollection<Vessel>();
 
         // Event to notify MainWindowViewModel about loading state changes
@@ -78,15 +78,17 @@ namespace HarborFlow.Wpf.ViewModels
 
         public async Task LoadVesselsAsync()
         {
-            LoadingStateChanged?.Invoke(this, true);
-            try
+            LoadingStateChanged?.Invoke(this, true);            try
             {
-                Vessels.Clear();
                 var vessels = await _vesselTrackingService.GetAllVesselsAsync();
-                foreach (var vessel in vessels)
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Vessels.Add(vessel);
-                }
+                    Vessels.Clear();
+                    foreach (var vessel in vessels)
+                    {
+                        Vessels.Add(vessel);
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -95,8 +97,7 @@ namespace HarborFlow.Wpf.ViewModels
             }
             finally
             {
-                LoadingStateChanged?.Invoke(this, false);
-            }
+                LoadingStateChanged?.Invoke(this, false);            }
         }
 
         private async Task AddVessel()
@@ -105,8 +106,7 @@ namespace HarborFlow.Wpf.ViewModels
             var dialogResult = _windowManager.ShowVesselEditorDialog(newVessel);
             if (dialogResult == true)
             {
-                LoadingStateChanged?.Invoke(this, true);
-                try
+                LoadingStateChanged?.Invoke(this, true);                try
                 {
                     await _vesselTrackingService.AddVesselAsync(newVessel);
                     await LoadVesselsAsync();
@@ -119,8 +119,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    LoadingStateChanged?.Invoke(this, false);
-                }
+                    LoadingStateChanged?.Invoke(this, false);                }
             }
         }
 
@@ -132,8 +131,7 @@ namespace HarborFlow.Wpf.ViewModels
             var dialogResult = _windowManager.ShowVesselEditorDialog(vesselCopy);
             if (dialogResult == true)
             {
-                LoadingStateChanged?.Invoke(this, true);
-                try
+                LoadingStateChanged?.Invoke(this, true);                try
                 {
                     await _vesselTrackingService.UpdateVesselAsync(vesselCopy);
                     await LoadVesselsAsync();
@@ -146,8 +144,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    LoadingStateChanged?.Invoke(this, false);
-                }
+                    LoadingStateChanged?.Invoke(this, false);                }
             }
         }
 
@@ -157,8 +154,7 @@ namespace HarborFlow.Wpf.ViewModels
             {
                 if (_notificationService.ShowConfirmation("Delete Vessel", $"Are you sure you want to delete {SelectedVessel.Name}?"))
                 {
-                    LoadingStateChanged?.Invoke(this, true);
-                    try
+                    LoadingStateChanged?.Invoke(this, true);                    try
                     {
                         await _vesselTrackingService.DeleteVesselAsync(SelectedVessel.IMO);
                         await LoadVesselsAsync();
@@ -171,8 +167,7 @@ namespace HarborFlow.Wpf.ViewModels
                     }
                     finally
                     {
-                        LoadingStateChanged?.Invoke(this, false);
-                    }
+                        LoadingStateChanged?.Invoke(this, false);                    }
                 }
             }
         }

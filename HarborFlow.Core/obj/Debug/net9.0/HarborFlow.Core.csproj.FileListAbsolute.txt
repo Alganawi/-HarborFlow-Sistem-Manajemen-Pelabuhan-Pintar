@@ -1,16 +1,3 @@
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.csproj.AssemblyReference.cache
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.GeneratedMSBuildEditorConfig.editorconfig
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.AssemblyInfoInputs.cache
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.AssemblyInfo.cs
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.csproj.CoreCompileInputs.cache
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.sourcelink.json
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/bin/Debug/net9.0/HarborFlow.Core.deps.json
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/bin/Debug/net9.0/HarborFlow.Core.dll
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/bin/Debug/net9.0/HarborFlow.Core.pdb
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.dll
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/refint/HarborFlow.Core.dll
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/HarborFlow.Core.pdb
-/Users/marseillosatrian/Downloads/HarborFflow_WPF/HarborFlow.Core/obj/Debug/net9.0/ref/HarborFlow.Core.dll
 C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\bin\Debug\net9.0\HarborFlow.Core.deps.json
 C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\bin\Debug\net9.0\HarborFlow.Core.dll
 C:\Users\LENOVO\Documents\wpfjun\HarborFlow.Core\bin\Debug\net9.0\HarborFlow.Core.pdb

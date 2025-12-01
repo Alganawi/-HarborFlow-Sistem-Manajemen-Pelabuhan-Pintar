@@ -50,11 +50,49 @@ namespace HarborFlow.Application.Services
             }, null);
         }
 
-        public Task StartTracking(double[][] boundingBoxes)
+        public async Task StartTracking(double[][] boundingBoxes)
         {
             _logger.LogInformation("Starting vessel tracking stream.");
+            
+            // Load existing vessels from database first
+            await LoadInitialVesselsAsync();
+            
+            // Then start AIS stream for live updates
             _aisStreamService.Start();
-            return Task.CompletedTask;
+        }
+
+        private async Task LoadInitialVesselsAsync()
+        {
+            try
+            {
+                var vessels = await _context.Vessels
+                    .Include(v => v.Positions)
+                    .ToListAsync();
+
+                var action = new Action(() =>
+                {
+                    TrackedVessels.Clear();
+                    foreach (var vessel in vessels)
+                    {
+                        TrackedVessels.Add(vessel);
+                    }
+                });
+
+                if (_syncContext != null)
+                {
+                    _syncContext.Post(_ => action(), null);
+                }
+                else
+                {
+                    action();
+                }
+
+                _logger.LogInformation("Loaded {Count} vessels from database.", vessels.Count);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load initial vessels.");
+            }
         }
 
         public Task StopTracking()

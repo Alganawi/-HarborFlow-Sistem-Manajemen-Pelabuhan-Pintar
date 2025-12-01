@@ -18,7 +18,6 @@ namespace HarborFlow.Wpf.ViewModels
         private readonly SessionContext _sessionContext;
         private readonly INotificationService _notificationService;
         private readonly ILogger<LoginViewModel> _logger;
-
         private bool _isLoading;
         public bool IsLoading
         {
@@ -34,7 +33,6 @@ namespace HarborFlow.Wpf.ViewModels
 
         // Event to notify MainWindowViewModel about loading state changes
         public event EventHandler<bool>? LoadingStateChanged;
-
         private string _username = string.Empty;
         public string Username
         {
@@ -67,8 +65,11 @@ namespace HarborFlow.Wpf.ViewModels
             {
                 _errorMessage = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsErrorVisible));
             }
         }
+
+        public bool IsErrorVisible => !string.IsNullOrEmpty(ErrorMessage);
 
         public ICommand LoginCommand { get; }
         public ICommand OpenRegisterWindowCommand { get; }
@@ -92,7 +93,7 @@ namespace HarborFlow.Wpf.ViewModels
         private async Task Login(object? parameter)
         {
             IsLoading = true;
-            (LoginCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
+            (LoginCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();            
             ErrorMessage = string.Empty;
 
             try
@@ -100,24 +101,27 @@ namespace HarborFlow.Wpf.ViewModels
                 var user = await _authService.AuthenticateAsync(Username, Password);
                 if (user != null)
                 {
-                                        _sessionContext.CurrentUser = user; // This triggers the UserChanged event
-                    _windowManager.CloseLoginWindow();
+                    _sessionContext.CurrentUser = user; // This triggers the UserChanged event
+                    _windowManager.ShowMainWindow(); // Show main window
+                    _windowManager.CloseLoginWindow(); // Then close login window
                 }
                 else
                 {
-                    
+                    ErrorMessage = "Invalid username or password.";
+                    _notificationService.ShowNotification("Invalid username or password.", Core.Models.NotificationType.Error);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred during login for user {Username}.", Username);
-                
+                ErrorMessage = "An error occurred during login. Please try again.";
+                _notificationService.ShowNotification("An error occurred during login. Please try again.", Core.Models.NotificationType.Error);
             }
             finally
             {
                 Password = string.Empty; // Clear password after login attempt
                 IsLoading = false;
-                (LoginCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
+                (LoginCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();            
             }
         }
 

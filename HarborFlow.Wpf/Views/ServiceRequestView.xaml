@@ -19,11 +19,11 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
             <TextBlock Text="Service Requests" FontSize="24" FontWeight="Bold" />
             <Button Content="Refresh" Command="{Binding RefreshServiceRequestsCommand}" Margin="20,0,0,0" />
-            <Button Content="Add" Command="{Binding AddServiceRequestCommand}" Margin="10,0,0,0}" Visibility="{Binding CanAddServiceRequest, Converter={StaticResource BoolToVis}}"/>
-            <Button Content="Edit" Command="{Binding EditServiceRequestCommand}" Margin="10,0,0,0}" Visibility="{Binding CanEditServiceRequest, Converter={StaticResource BoolToVis}}"/>
-            <Button Content="Delete" Command="{Binding DeleteServiceRequestCommand}" Margin="10,0,0,0}" Visibility="{Binding CanDeleteServiceRequest, Converter={StaticResource BoolToVis}}"/>
-            <Button Content="Approve" Command="{Binding ApproveServiceRequestCommand}" Margin="10,0,0,0}" Visibility="{Binding CanUserApproveOrReject, Converter={StaticResource BoolToVis}}"/>
-            <Button Content="Reject" Command="{Binding RejectServiceRequestCommand}" Margin="10,0,0,0}" Visibility="{Binding CanUserApproveOrReject, Converter={StaticResource BoolToVis}}"/>
+            <Button Content="Add" Command="{Binding AddServiceRequestCommand}" Margin="10,0,0,0" Visibility="{Binding CanAddServiceRequest, Converter={StaticResource BoolToVis}}"/>
+            <Button Content="Edit" Command="{Binding EditServiceRequestCommand}" Margin="10,0,0,0" Visibility="{Binding CanEditServiceRequest, Converter={StaticResource BoolToVis}}"/>
+            <Button Content="Delete" Command="{Binding DeleteServiceRequestCommand}" Margin="10,0,0,0" Visibility="{Binding CanDeleteServiceRequest, Converter={StaticResource BoolToVis}}"/>
+            <Button Content="Approve" Command="{Binding ApproveServiceRequestCommand}" Margin="10,0,0,0" Visibility="{Binding CanUserApproveOrReject, Converter={StaticResource BoolToVis}}"/>
+            <Button Content="Reject" Command="{Binding RejectServiceRequestCommand}" Margin="10,0,0,0" Visibility="{Binding CanUserApproveOrReject, Converter={StaticResource BoolToVis}}"/>
         </StackPanel>
 
         <DataGrid Grid.Row="1" 

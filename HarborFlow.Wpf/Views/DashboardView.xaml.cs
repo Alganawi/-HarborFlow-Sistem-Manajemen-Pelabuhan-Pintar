@@ -35,7 +35,6 @@ namespace HarborFlow.Wpf.Views
                 {
                     _viewModel.RefreshCommand.Execute(null);
                 }
-            }
-        }
+            }        }
     }
 }

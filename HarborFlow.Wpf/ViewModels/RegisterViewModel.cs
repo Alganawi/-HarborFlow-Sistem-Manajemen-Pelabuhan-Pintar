@@ -106,15 +106,19 @@ namespace HarborFlow.Wpf.ViewModels
             var validationResult = _validator.Validate(this);
             if (!validationResult.IsValid)
             {
-                
+                var errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+                System.Diagnostics.Debug.WriteLine($"Validation failed: {errors}");
+                _notificationService.ShowNotification($"Validation failed: {errors}", Core.Models.NotificationType.Error);
                 IsLoading = false;
                 ((AsyncRelayCommand)RegisterCommand).RaiseCanExecuteChanged();
                 return;
             }
 
+            System.Diagnostics.Debug.WriteLine("Validation passed, checking if user exists...");
             if (await _authService.UserExistsAsync(Username))
             {
-                
+                System.Diagnostics.Debug.WriteLine($"User {Username} already exists!");
+                _notificationService.ShowNotification($"Username '{Username}' is already taken. Please choose another.", Core.Models.NotificationType.Warning);
                 IsLoading = false;
                 ((AsyncRelayCommand)RegisterCommand).RaiseCanExecuteChanged();
                 return;
@@ -122,19 +126,26 @@ namespace HarborFlow.Wpf.ViewModels
 
             try
             {
+                System.Diagnostics.Debug.WriteLine($"Attempting to register user: {Username}");
                 await _authService.RegisterAsync(Username, Password, Email, FullName);
+                
+                System.Diagnostics.Debug.WriteLine($"Registration successful for user: {Username}");
+                _notificationService.ShowNotification($"Registration successful! Welcome {Username}!", Core.Models.NotificationType.Success);
+                
+                // Clear passwords only on success
+                Password = string.Empty;
+                ConfirmPassword = string.Empty;
                 
                 RegistrationSucceeded?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Registration error: {ex.Message}");
                 _logger.LogError(ex, "An error occurred during registration for user {Username}.", Username);
-                
+                _notificationService.ShowNotification($"Registration failed: {ex.Message}", Core.Models.NotificationType.Error);
             }
             finally
             {
-                Password = string.Empty;
-                ConfirmPassword = string.Empty;
                 IsLoading = false;
                 ((AsyncRelayCommand)RegisterCommand).RaiseCanExecuteChanged();
             }

@@ -53,6 +53,8 @@ namespace HarborFlow.Wpf
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddLogging();
+                    
+                    // Register configuration
                     services.AddSingleton<IConfiguration>(hostContext.Configuration);
                     
                     services.AddSingleton<MainWindow>();
@@ -75,7 +77,6 @@ namespace HarborFlow.Wpf
                     services.AddTransient<ServiceRequestView>();
 
                     services.AddTransient<NewsView>();
-
                     services.AddTransient<UserProfileViewModel>();
                     services.AddTransient<UserProfileView>();
 
@@ -100,6 +101,10 @@ namespace HarborFlow.Wpf
                     services.AddScoped<IPortServiceManager, PortServiceManager>();
                     services.AddScoped<IBookmarkService, BookmarkService>();
                     services.AddSingleton<IVesselTrackingService, VesselTrackingService>();
+                    services.AddSingleton<IAisStreamService, AisStreamService>();
+                    services.AddSingleton<IAisDataService, AisDataService>();
+                    services.AddSingleton<IUserProfileService, UserProfileService>();
+                    services.AddSingleton<IRssFeedManager, RssFeedManager>();
 
                     services.AddHttpClient<IRssService, RssService>();
                     services.AddHttpClient<IWeatherService, OpenMeteoWeatherService>();
@@ -125,10 +130,29 @@ namespace HarborFlow.Wpf
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<HarborFlowDbContext>();
                 await dbContext.Database.MigrateAsync();
+                
+                // Seed database with sample vessels
+                await DatabaseSeeder.SeedAsync(dbContext);
             }
 
+            // Bypass login - auto-login as admin for development
+            var sessionContext = AppHost.Services.GetRequiredService<SessionContext>();
+            sessionContext.CurrentUser = new User
+            {
+                UserId = Guid.NewGuid(),
+                Username = "admin",
+                Email = "admin@harborflow.com",
+                Role = UserRole.Administrator,
+                FullName = "System Administrator",
+                Organization = "HarborFlow System",
+                IsActive = true,
+                LastLogin = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
             var windowManager = AppHost.Services.GetRequiredService<IWindowManager>();
-                        windowManager.ShowMainWindow();
+            windowManager.ShowMainWindow();
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

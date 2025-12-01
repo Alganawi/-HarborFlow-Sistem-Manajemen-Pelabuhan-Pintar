@@ -18,7 +18,6 @@ namespace HarborFlow.Infrastructure.Services
         private readonly ClientWebSocket _webSocket = new ClientWebSocket();
         private readonly IConfiguration _configuration;
         private CancellationTokenSource? _cancellationTokenSource;
-
         public AisStreamService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -26,8 +25,17 @@ namespace HarborFlow.Infrastructure.Services
 
         public async void Start()
         {
+            _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
             var apiKey = _configuration["ApiKeys:AisStream"];
+            
+            // Skip if no API key configured
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                Console.WriteLine("AIS Stream API key not configured. Skipping AIS stream connection.");
+                return;
+            }
+            
             var uri = new Uri("wss://stream.aisstream.io/v0/stream");
 
             try
@@ -43,9 +51,13 @@ namespace HarborFlow.Infrastructure.Services
 
                 await ReceiveMessages(_cancellationTokenSource.Token);
             }
+            catch (WebSocketException wsEx)
+            {
+                Console.WriteLine($"WebSocket connection failed: {wsEx.Message}. AIS live stream will not be available.");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"WebSocket connection error: {ex.Message}");
+                Console.WriteLine($"AIS Stream error: {ex.Message}");
             }
         }
 

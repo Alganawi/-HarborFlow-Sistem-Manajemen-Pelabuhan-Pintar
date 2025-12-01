@@ -29,7 +29,7 @@
         <DataTemplate DataType="{x:Type viewmodels:NewsViewModel}">
             <views:NewsView/>
         </DataTemplate>
-        <Style x:Key="NavListBoxItemStyle" TargetType="ListBoxItem">
+        <Style x:Key="MainNavListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource NavListBoxItemStyle}">
             <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BoolToVis}}"/>
         </Style>
     </Window.Resources>
@@ -46,8 +46,9 @@
                 <ListBox ItemsSource="{Binding NavigationItems}"
                          SelectedItem="{Binding SelectedNavigationItem}"
                          DisplayMemberPath="DisplayName"
+                         TextElement.Foreground="White"
                          Style="{StaticResource NavListBoxStyle}"
-                         ItemContainerStyle="{StaticResource NavListBoxItemStyle}">
+                         ItemContainerStyle="{StaticResource MainNavListBoxItemStyle}">
                 </ListBox>
             </StackPanel>
         </Border>

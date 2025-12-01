@@ -9,11 +9,17 @@ namespace HarborFlow.Wpf.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool boolValue && boolValue)
+            bool boolValue = value is bool b && b;
+            
+            // Check if we need to invert
+            bool invert = parameter is string str && str.Equals("invert", StringComparison.OrdinalIgnoreCase);
+            
+            if (invert)
             {
-                return Visibility.Visible;
+                boolValue = !boolValue;
             }
-            return Visibility.Collapsed;
+            
+            return boolValue ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

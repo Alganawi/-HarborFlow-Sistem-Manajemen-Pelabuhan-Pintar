@@ -15,6 +15,9 @@ namespace HarborFlow.Wpf.Views
             DataContext = viewModel;
             viewModel.RegistrationSucceeded += (sender, e) =>
             {
+                // Clear password boxes on successful registration
+                PasswordBox.Clear();
+                ConfirmPasswordBox.Clear();
                 this.Close();
             };
         }

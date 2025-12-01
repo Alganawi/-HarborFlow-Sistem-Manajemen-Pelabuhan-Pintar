@@ -1,24 +1,28 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <SolidColorBrush x:Key="WindowBackgroundColor" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="WindowBackgroundColor" Color="#FFF5F5F5"/>
 
-    <!-- Light Theme Colors -->
+    <!-- Light Theme Colors - Enhanced Contrast -->
     <SolidColorBrush x:Key="PrimaryBackgroundColor" Color="#FFFFFFFF"/>
-    <SolidColorBrush x:Key="PrimaryForegroundColor" Color="#FF000000"/>
-    <SolidColorBrush x:Key="ButtonBackgroundColor" Color="#FFDDDDDD"/>
-    <SolidColorBrush x:Key="ButtonForegroundColor" Color="#FF000000"/>
-    <SolidColorBrush x:Key="ButtonHoverBackgroundColor" Color="#FFCCCCCC"/>
+    <SolidColorBrush x:Key="PrimaryForegroundColor" Color="#FF1A1A1A"/>
+    <SolidColorBrush x:Key="SecondaryForegroundColor" Color="#FF5A5A5A"/>
+    <SolidColorBrush x:Key="ButtonBackgroundColor" Color="#FF0078D4"/>
+    <SolidColorBrush x:Key="ButtonForegroundColor" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ButtonHoverBackgroundColor" Color="#FF005A9E"/>
     <SolidColorBrush x:Key="TextBoxBackgroundColor" Color="#FFFFFFFF"/>
-    <SolidColorBrush x:Key="TextBoxForegroundColor" Color="#FF000000"/>
-    <SolidColorBrush x:Key="TextBoxBorderColor" Color="#FFCCCCCC"/>
+    <SolidColorBrush x:Key="TextBoxForegroundColor" Color="#FF1A1A1A"/>
+    <SolidColorBrush x:Key="TextBoxBorderColor" Color="#FFD1D1D1"/>
     <SolidColorBrush x:Key="ListViewBackgroundColor" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="CardBackgroundColor" Color="#FFFFFFFF"/>
 
     <!-- Button Style -->
     <Style TargetType="Button">
         <Setter Property="Background" Value="{StaticResource ButtonBackgroundColor}"/>
         <Setter Property="Foreground" Value="{StaticResource ButtonForegroundColor}"/>
-        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -68,7 +72,8 @@
         <Setter Property="Foreground" Value="{StaticResource TextBoxForegroundColor}"/>
         <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorderColor}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value="8,6"/>
+        <Setter Property="FontSize" Value="14"/>
     </Style>
 
     <!-- ListView Style -->
@@ -85,6 +90,13 @@
     <!-- TextBlock Style -->
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!-- Label Style -->
+    <Style TargetType="Label">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
+        <Setter Property="FontSize" Value="14"/>
     </Style>
 
     <Style x:Key="HyperlinkButtonStyle" TargetType="Button">
@@ -95,12 +107,16 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" 
+                    <Border Background="Transparent" 
                             BorderThickness="0"
                             Padding="2">
-                        <TextBlock Text="{TemplateBinding Content}" 
-                                   TextDecorations="Underline" 
-                                   Foreground="{TemplateBinding Foreground}"/>
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderThickness="0"
+                                Padding="2">
+                            <TextBlock Text="{TemplateBinding Content}" 
+                                       TextDecorations="Underline" 
+                                       Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -158,9 +174,9 @@
         <GradientStop Color="#FF052767" Offset="0.0"/>
         <GradientStop Color="#FF3A0647" Offset="0.7"/>
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="SidebarForegroundBrush" Color="#FFD7D7D7"/>
-    <SolidColorBrush x:Key="SidebarHoverBrush" Color="#1AFFFFFF"/>
-    <SolidColorBrush x:Key="SidebarSelectedBrush" Color="#40FFFFFF"/>
+    <SolidColorBrush x:Key="SidebarForegroundBrush" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="SidebarHoverBrush" Color="#30FFFFFF"/>
+    <SolidColorBrush x:Key="SidebarSelectedBrush" Color="#50FFFFFF"/>
 
     <!-- Navigation ListBox Style -->
     <Style x:Key="NavListBoxStyle" TargetType="ListBox">
@@ -170,8 +186,10 @@
     </Style>
 
     <Style x:Key="NavListBoxItemStyle" TargetType="ListBoxItem">
-        <Setter Property="Padding" Value="15,10"/>
+        <Setter Property="Padding" Value="15,12"/>
         <Setter Property="Margin" Value="5"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Foreground" Value="{StaticResource SidebarForegroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using HarborFlow.Core.Interfaces;
 using HarborFlow.Core.Models;
@@ -59,6 +60,9 @@ namespace HarborFlow.Wpf.ViewModels
             _configuration = configuration;
             _logger = logger;
             LoadNewsCommand = new AsyncRelayCommand(LoadNewsAsync);
+            
+            // Auto-load news on initialization
+            _ = LoadNewsAsync(null);
         }
 
         private async Task LoadNewsAsync(object? parameter)
@@ -95,40 +99,26 @@ namespace HarborFlow.Wpf.ViewModels
         }
 
                         private void FilterAndDisplayArticles()
-
                         {
-
-                            Articles.Clear();
-
-                            IEnumerable<NewsArticle> filteredArticles = _allLoadedArticles;
-
-                
-
-                            if (!string.IsNullOrWhiteSpace(SearchText))
-
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
+                                Articles.Clear();
 
-                                filteredArticles = filteredArticles.Where(a => {
+                                IEnumerable<NewsArticle> filteredArticles = _allLoadedArticles;
 
-                                    bool titleMatch = a.Title != null && a.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+                                if (!string.IsNullOrWhiteSpace(SearchText))
+                                {
+                                    filteredArticles = filteredArticles.Where(a => {
+                                        bool titleMatch = a.Title != null && a.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+                                        bool descriptionMatch = a.Description != null && a.Description.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+                                        return titleMatch || descriptionMatch;
+                                    });
+                                }
 
-                                    bool descriptionMatch = a.Description != null && a.Description.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
-
-                                    return titleMatch || descriptionMatch;
-
-                                });
-
-                            }
-
-                
-
-                            foreach (var article in filteredArticles.Take(50))
-
-                            {
-
-                                Articles.Add(article);
-
-                            }
-
+                                foreach (var article in filteredArticles.Take(50))
+                                {
+                                    Articles.Add(article);
+                                }
+                            });
                         }    }
 }

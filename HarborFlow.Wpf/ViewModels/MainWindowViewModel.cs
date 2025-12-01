@@ -180,7 +180,7 @@ namespace HarborFlow.Wpf.ViewModels
 
             notificationHub.NotificationReceived += OnNotificationReceived;
             _sessionContext.UserChanged += SessionContext_UserChanged;
-
+            
             // Subscribe to loading state changes from child ViewModels
             _dashboardViewModel.LoadingStateChanged += (s, isLoading) => IsLoading = isLoading;
             _serviceRequestViewModel.LoadingStateChanged += (s, isLoading) => IsLoading = isLoading;

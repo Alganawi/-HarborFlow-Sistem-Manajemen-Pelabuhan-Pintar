@@ -21,7 +21,7 @@ namespace HarborFlow.Wpf.ViewModels
         private readonly INotificationService _notificationService;
         private readonly ILogger<ServiceRequestViewModel> _logger;
         private readonly SessionContext _sessionContext;
-
+        
         public ObservableCollection<ServiceRequest> ServiceRequests { get; } = new ObservableCollection<ServiceRequest>();
 
         // Event to notify MainWindowViewModel about loading state changes
@@ -54,7 +54,7 @@ namespace HarborFlow.Wpf.ViewModels
         public bool CanAddServiceRequest => _sessionContext?.CurrentUser?.Role == UserRole.MaritimeAgent;
         public bool CanEditServiceRequest => _sessionContext?.CurrentUser?.Role == UserRole.MaritimeAgent && SelectedServiceRequest?.RequestedBy == _sessionContext.CurrentUser?.UserId;
         public bool CanDeleteServiceRequest => _sessionContext?.CurrentUser?.Role == UserRole.Administrator;
-
+        
         // Design-time constructor for XAML designer
         public ServiceRequestViewModel()
         {
@@ -99,15 +99,17 @@ namespace HarborFlow.Wpf.ViewModels
         {
             if (_sessionContext.CurrentUser == null) return;
 
-            LoadingStateChanged?.Invoke(this, true);
-            try
+            LoadingStateChanged?.Invoke(this, true);            try
             {
-                ServiceRequests.Clear();
                 var requests = await _portServiceManager.GetAllServiceRequestsAsync(_sessionContext.CurrentUser);
-                foreach (var request in requests)
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    ServiceRequests.Add(request);
-                }
+                    ServiceRequests.Clear();
+                    foreach (var request in requests)
+                    {
+                        ServiceRequests.Add(request);
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -115,8 +117,7 @@ namespace HarborFlow.Wpf.ViewModels
             }
             finally
             {
-                LoadingStateChanged?.Invoke(this, false);
-            }
+                LoadingStateChanged?.Invoke(this, false);            }
         }
 
         private async Task AddServiceRequest()
@@ -126,8 +127,7 @@ namespace HarborFlow.Wpf.ViewModels
             var dialogResult = _windowManager.ShowServiceRequestEditorDialog(newRequest);
             if (dialogResult == true)
             {
-                LoadingStateChanged?.Invoke(this, true);
-                try
+                LoadingStateChanged?.Invoke(this, true);                try
                 {
                     await _portServiceManager.SubmitServiceRequestAsync(newRequest);
                     await LoadServiceRequestsAsync();
@@ -138,8 +138,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    LoadingStateChanged?.Invoke(this, false);
-                }
+                    LoadingStateChanged?.Invoke(this, false);                }
             }
         }
 
@@ -151,8 +150,7 @@ namespace HarborFlow.Wpf.ViewModels
             var dialogResult = _windowManager.ShowServiceRequestEditorDialog(requestCopy);
             if (dialogResult == true)
             {
-                LoadingStateChanged?.Invoke(this, true);
-                try
+                LoadingStateChanged?.Invoke(this, true);                try
                 {
                     await _portServiceManager.UpdateServiceRequestAsync(requestCopy);
                     await LoadServiceRequestsAsync();
@@ -163,8 +161,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    LoadingStateChanged?.Invoke(this, false);
-                }
+                    LoadingStateChanged?.Invoke(this, false);                }
             }
         }
 
@@ -174,8 +171,7 @@ namespace HarborFlow.Wpf.ViewModels
             {
                 if (_notificationService.ShowConfirmation("Delete Service Request", $"Are you sure you want to delete this service request?"))
                 {
-                    LoadingStateChanged?.Invoke(this, true);
-                    try
+                    LoadingStateChanged?.Invoke(this, true);                    try
                     {
                         await _portServiceManager.DeleteServiceRequestAsync(SelectedServiceRequest.RequestId);
                         await LoadServiceRequestsAsync();
@@ -186,8 +182,7 @@ namespace HarborFlow.Wpf.ViewModels
                     }
                     finally
                     {
-                        LoadingStateChanged?.Invoke(this, false);
-                    }
+                        LoadingStateChanged?.Invoke(this, false);                    }
                 }
             }
         }
@@ -195,8 +190,7 @@ namespace HarborFlow.Wpf.ViewModels
         private async Task ApproveServiceRequest()
         {
             if (SelectedServiceRequest == null || _sessionContext.CurrentUser == null) return;
-            LoadingStateChanged?.Invoke(this, true);
-            try
+            LoadingStateChanged?.Invoke(this, true);            try
             {
                 await _portServiceManager.ApproveServiceRequestAsync(SelectedServiceRequest.RequestId, _sessionContext.CurrentUser.UserId);
                 await LoadServiceRequestsAsync();
@@ -207,8 +201,7 @@ namespace HarborFlow.Wpf.ViewModels
             }
             finally
             {
-                LoadingStateChanged?.Invoke(this, false);
-            }
+                LoadingStateChanged?.Invoke(this, false);            }
         }
 
         private async Task RejectServiceRequest()
@@ -218,8 +211,7 @@ namespace HarborFlow.Wpf.ViewModels
             var reason = _windowManager.ShowInputDialog("Reject Service Request", "Please provide a reason for rejection:");
             if (reason != null)
             {
-                LoadingStateChanged?.Invoke(this, true);
-                try
+                LoadingStateChanged?.Invoke(this, true);                try
                 {
                     await _portServiceManager.RejectServiceRequestAsync(SelectedServiceRequest.RequestId, _sessionContext.CurrentUser.UserId, reason);
                     await LoadServiceRequestsAsync();
@@ -230,8 +222,7 @@ namespace HarborFlow.Wpf.ViewModels
                 }
                 finally
                 {
-                    LoadingStateChanged?.Invoke(this, false);
-                }
+                    LoadingStateChanged?.Invoke(this, false);                }
             }
         }
 
