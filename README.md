@@ -13,7 +13,7 @@ HarborFlow adalah sistem manajemen pelabuhan full-stack yang dibangun dengan .NE
 | ---------------------- | --------------------------- | ---------------------------------------------------------------------------- |
 | Mirsad Alganawi Azma   | Lead Developer & Software Architect & WPF application| Merancang arsitektur sistem dasar dari aplikasi, desain data, dan memimpin pengembangan teknis. |
 | Marseillo R. B. Satrian| Backend developer, Database, Software Architect  & Web application| Mengimplementasikan logika backend, manajemen data, memanage API di applikasi, melengkapi pembangunan arsitektur aplikasi dan membangun antarmuka pengguna (khusus dalam web application).|
-| Muhammad Muqtada Alhaddad | Full-Stack Developer & WPF application| Mengimplementasikan logika backend, manajemen data, dan membangun antarmuka pengguna. |
+| Muhammad Muqtada Alhaddad | Full-Stack Developer & WPF application| Mengimplementasikan logika backend, manajemen data, dan membangun antarmuka pengguna (khusus dalam wpf application).|
 ---
 
 ## 3. Permasalahan yang Dipecahkan
